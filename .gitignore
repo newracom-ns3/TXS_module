@@ -5,14 +5,7 @@ CMakeFiles/
 /DartConfiguration.tcl
 /Makefile
 
-# /CMakeCache.txt
-# /CMakeFiles
-# /CPackConfig.cmake
-# /CPackSourceConfig.cmake
-# /CTestTestfile.cmake
-# /DartConfiguration.tcl
-# /Makefile
-# /cmake_install.cmake
+*.Identifier
 
 *.diff
 *.orig
