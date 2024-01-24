@@ -22,7 +22,6 @@
 
 #include "mu-snr-tag.h"
 
-// #include "ns3/nrc-frame-exchange-manager.h"
 #include "ns3/vht-frame-exchange-manager.h"
 
 #include <map>
@@ -355,7 +354,7 @@ class HeFrameExchangeManager : public VhtFrameExchangeManager
     EventId m_intraBssNavResetEvent; //!< the event to reset the intra-BSS NAV after an RTS
 
   private:
-    friend class NrcFrameExchangeManager;
+    friend class TxsFrameExchangeManager;
     /**
      * Send the current PSDU map as a DL MU PPDU.
      */

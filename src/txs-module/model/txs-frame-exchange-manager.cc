@@ -1,7 +1,26 @@
-#include "nrc-frame-exchange-manager.h"
+/*
+ * Copyright (c) 2024 Newracom
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation;
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * Author: Seungmin Lee <sm.lee@newratek.com>
+ *         Changmin Lee <cm.lee@newratek.com>
+ */
 
-// #include "nrc-ctrl-headers.h"
-#include "nrc-multi-user-scheduler.h"
+#include "txs-frame-exchange-manager.h"
+
+#include "txs-multi-user-scheduler.h"
 
 #include "ns3/abort.h"
 #include "ns3/ap-wifi-mac.h"
@@ -22,31 +41,31 @@
 namespace ns3
 {
 
-NS_LOG_COMPONENT_DEFINE("NrcFrameExchangeManager");
-NS_OBJECT_ENSURE_REGISTERED(NrcFrameExchangeManager);
+NS_LOG_COMPONENT_DEFINE("TxsFrameExchangeManager");
+NS_OBJECT_ENSURE_REGISTERED(TxsFrameExchangeManager);
 
 TypeId
-NrcFrameExchangeManager::GetTypeId()
+TxsFrameExchangeManager::GetTypeId()
 {
-    static TypeId tid = TypeId("ns3::NrcFrameExchangeManager")
+    static TypeId tid = TypeId("ns3::TxsFrameExchangeManager")
                             .SetParent<EhtFrameExchangeManager>()
-                            .AddConstructor<NrcFrameExchangeManager>()
+                            .AddConstructor<TxsFrameExchangeManager>()
                             .SetGroupName("Wifi");
     return tid;
 }
 
-NrcFrameExchangeManager::NrcFrameExchangeManager()
+TxsFrameExchangeManager::TxsFrameExchangeManager()
 {
     NS_LOG_FUNCTION(this);
 }
 
-NrcFrameExchangeManager::~NrcFrameExchangeManager()
+TxsFrameExchangeManager::~TxsFrameExchangeManager()
 {
     NS_LOG_FUNCTION_NOARGS();
 }
 
 void
-NrcFrameExchangeManager::DoDispose()
+TxsFrameExchangeManager::DoDispose()
 {
     NS_LOG_FUNCTION(this);
     m_txParams.Clear();
@@ -54,7 +73,7 @@ NrcFrameExchangeManager::DoDispose()
 }
 
 bool
-NrcFrameExchangeManager::StartFrameExchange(Ptr<QosTxop> edca,
+TxsFrameExchangeManager::StartFrameExchange(Ptr<QosTxop> edca,
                                             Time availableTime,
                                             bool initialFrame)
 {
@@ -75,9 +94,9 @@ NrcFrameExchangeManager::StartFrameExchange(Ptr<QosTxop> edca,
 
     if (this->GetMuScheduler())
     {
-        Ptr<NrcMultiUserScheduler> nrcMuScheduler =
-            StaticCast<NrcMultiUserScheduler>(this->GetMuScheduler());
-        bool lastTxIsDl = nrcMuScheduler->CheckLastTxIsDlMu();
+        Ptr<TxsMultiUserScheduler> txsMuScheduler =
+            StaticCast<TxsMultiUserScheduler>(this->GetMuScheduler());
+        bool lastTxIsDl = txsMuScheduler->CheckLastTxIsDlMu();
         NS_LOG_INFO("!GetBar(edca->GetAccessCategory()) :" << !GetBar(edca->GetAccessCategory()));
         NS_LOG_INFO("!(mpdu = edca->PeekNextMpdu(m_linkId)) :" << !(mpdu));
         NS_LOG_INFO("lastTxIsDl: " << lastTxIsDl);
@@ -88,14 +107,14 @@ NrcFrameExchangeManager::StartFrameExchange(Ptr<QosTxop> edca,
         {
             if (initialFrame)
             {
-                nrcMuScheduler->NotifyAccessGranted(m_linkId);
+                txsMuScheduler->NotifyAccessGranted(m_linkId);
             }
 
             if (Mac48Address ulSta("00:00:00:00:00:02");
-                nrcMuScheduler->GetFirstAssocStaList() == ulSta)
+                txsMuScheduler->GetFirstAssocStaList() == ulSta)
             {
-                NS_LOG_INFO("UL STA Address: " << nrcMuScheduler->GetFirstAssocStaList());
-                if (SendMuRtsTxs(nrcMuScheduler->GetFirstAssocStaList(), availableTime) ==
+                NS_LOG_INFO("UL STA Address: " << txsMuScheduler->GetFirstAssocStaList());
+                if (SendMuRtsTxs(txsMuScheduler->GetFirstAssocStaList(), availableTime) ==
                     TxsTime::ENOUGH)
                 {
                     return true;
@@ -108,7 +127,7 @@ NrcFrameExchangeManager::StartFrameExchange(Ptr<QosTxop> edca,
 }
 
 Time
-NrcFrameExchangeManager::CalculateMuRtsTxDuration(const NrcCtrlTriggerHeader& muRtsTxs,
+TxsFrameExchangeManager::CalculateMuRtsTxDuration(const TxsCtrlTriggerHeader& muRtsTxs,
                                                   const WifiTxVector& muRtsTxsTxVector,
                                                   const WifiMacHeader& hdr) const
 {
@@ -120,7 +139,7 @@ NrcFrameExchangeManager::CalculateMuRtsTxDuration(const NrcCtrlTriggerHeader& mu
 }
 
 void
-NrcFrameExchangeManager::SetImaginaryPsdu()
+TxsFrameExchangeManager::SetImaginaryPsdu()
 {
     Ptr<Packet> imaginaryPacket = Create<Packet>();
 
@@ -131,12 +150,12 @@ NrcFrameExchangeManager::SetImaginaryPsdu()
 }
 
 bool
-NrcFrameExchangeManager::SendMuRtsTxs(const Mac48Address& receiver, const Time availableTime)
+TxsFrameExchangeManager::SendMuRtsTxs(const Mac48Address& receiver, const Time availableTime)
 {
     NS_LOG_FUNCTION(this);
     Ptr<WifiRemoteStationManager> wifiRemoteStationManager = this->GetWifiRemoteStationManager();
 
-    NrcCtrlTriggerHeader muRtsTxs;
+    TxsCtrlTriggerHeader muRtsTxs;
     muRtsTxs.SetType(TriggerFrameType::MU_RTS_TRIGGER);
     muRtsTxs.SetCsRequired(true);
     muRtsTxs.SetTxsMode(TxsModes::MU_RTS_TXS_MODE_1);
@@ -173,7 +192,7 @@ NrcFrameExchangeManager::SendMuRtsTxs(const Mac48Address& receiver, const Time a
     uint8_t aid12 = m_apMac->GetAssociationId(receiver, m_linkId);
     auto userInfoIt = std::find_if(muRtsTxs.begin(),
                                    muRtsTxs.end(),
-                                   [aid12](const NrcCtrlTriggerUserInfoField& ui) -> bool {
+                                   [aid12](const TxsCtrlTriggerUserInfoField& ui) -> bool {
                                        return (ui.GetAid12() == aid12);
                                    });
     NS_ASSERT_MSG(userInfoIt != muRtsTxs.end(),
@@ -211,7 +230,7 @@ NrcFrameExchangeManager::SendMuRtsTxs(const Mac48Address& receiver, const Time a
     m_txTimer.Set(WifiTxTimer::WAIT_CTS_AFTER_MU_RTS_TXS_MODE_1,
                   timeout,
                   {receiver},
-                  &NrcFrameExchangeManager::CtsAfterMuRtsTxsTimeout,
+                  &TxsFrameExchangeManager::CtsAfterMuRtsTxsTimeout,
                   this,
                   mpdu,
                   muRtsTxsTxVector);
@@ -226,7 +245,7 @@ NrcFrameExchangeManager::SendMuRtsTxs(const Mac48Address& receiver, const Time a
 }
 
 bool
-NrcFrameExchangeManager::TrySendMuRtsTxs(const Time availableTime,
+TxsFrameExchangeManager::TrySendMuRtsTxs(const Time availableTime,
                                          const Time txDuration,
                                          const WifiTxVector& ctsTxVector) const
 {
@@ -240,16 +259,16 @@ NrcFrameExchangeManager::TrySendMuRtsTxs(const Time availableTime,
 }
 
 bool
-NrcFrameExchangeManager::IsInValid(Ptr<const WifiMpdu> mpdu) const
+TxsFrameExchangeManager::IsInValid(Ptr<const WifiMpdu> mpdu) const
 {
-    NrcCtrlTriggerHeader trigger(false);
+    TxsCtrlTriggerHeader trigger(false);
     mpdu->GetPacket()->PeekHeader(trigger);
     return !(trigger.IsMuRts()) || (trigger.GetTxsMode() != TxsModes::MU_RTS_TXS_MODE_1 &&
                                     trigger.GetTxsMode() != TxsModes::MU_RTS_TXS_MODE_2);
 }
 
 void
-NrcFrameExchangeManager::ReceiveMpdu(Ptr<const WifiMpdu> mpdu,
+TxsFrameExchangeManager::ReceiveMpdu(Ptr<const WifiMpdu> mpdu,
                                      RxSignalInfo rxSignalInfo,
                                      const WifiTxVector& txVector,
                                      bool inAmpdu)
@@ -304,12 +323,12 @@ NrcFrameExchangeManager::ReceiveMpdu(Ptr<const WifiMpdu> mpdu,
                 return;
             }
 
-            NrcCtrlTriggerHeader commonInfoField(false);
+            TxsCtrlTriggerHeader commonInfoField(false);
             mpdu->GetPacket()->PeekHeader(commonInfoField);
             if ((commonInfoField.GetType() == TriggerFrameType::MU_RTS_TRIGGER) &&
                 (commonInfoField.GetTxsMode() == TxsModes::MU_RTS_TXS_MODE_1))
             {
-                NrcCtrlTriggerHeader trigger;
+                TxsCtrlTriggerHeader trigger;
                 mpdu->GetPacket()->PeekHeader(trigger);
 
                 if (hdr.GetAddr2() != m_bssid // not sent by the AP this STA is associated with
@@ -330,7 +349,7 @@ NrcFrameExchangeManager::ReceiveMpdu(Ptr<const WifiMpdu> mpdu,
 
                 NS_LOG_DEBUG("Schedule CTS After sending MU-RTS TXS frame");
                 Simulator::Schedule(m_phy->GetSifs(),
-                                    &NrcFrameExchangeManager::SendCtsAfterMuRtsTxs,
+                                    &TxsFrameExchangeManager::SendCtsAfterMuRtsTxs,
                                     this,
                                     hdr,
                                     trigger,
@@ -472,7 +491,7 @@ NrcFrameExchangeManager::ReceiveMpdu(Ptr<const WifiMpdu> mpdu,
 }
 
 void
-NrcFrameExchangeManager::EndReceiveAmpdu(Ptr<const WifiPsdu> psdu,
+TxsFrameExchangeManager::EndReceiveAmpdu(Ptr<const WifiPsdu> psdu,
                                          const RxSignalInfo& rxSignalInfo,
                                          const WifiTxVector& txVector,
                                          const std::vector<bool>& perMpduStatus)
@@ -527,7 +546,7 @@ NrcFrameExchangeManager::EndReceiveAmpdu(Ptr<const WifiPsdu> psdu,
 }
 
 void
-NrcFrameExchangeManager::ResetTxTimer(Ptr<const WifiMpdu> mpdu,
+TxsFrameExchangeManager::ResetTxTimer(Ptr<const WifiMpdu> mpdu,
                                       const WifiTxVector& txVector,
                                       const Mac48Address& macAddress,
                                       Time duration)
@@ -538,14 +557,14 @@ NrcFrameExchangeManager::ResetTxTimer(Ptr<const WifiMpdu> mpdu,
     m_txTimer.Set(WifiTxTimer::WAIT_REGRANT_AFTER_TXS,
                   duration,
                   {macAddress},
-                  &NrcFrameExchangeManager::CheckReGrantConditions,
+                  &TxsFrameExchangeManager::CheckReGrantConditions,
                   this,
                   dummyMpdu,
                   txVector);
 }
 
 Time
-NrcFrameExchangeManager::GetBlockAckDuration(const RecipientBlockAckAgreement& agreement,
+TxsFrameExchangeManager::GetBlockAckDuration(const RecipientBlockAckAgreement& agreement,
                                              Time durationId,
                                              WifiTxVector& blockAckTxVector,
                                              double rxSnr)
@@ -564,7 +583,7 @@ NrcFrameExchangeManager::GetBlockAckDuration(const RecipientBlockAckAgreement& a
 }
 
 void
-NrcFrameExchangeManager::SendBlockAck(const RecipientBlockAckAgreement& agreement,
+TxsFrameExchangeManager::SendBlockAck(const RecipientBlockAckAgreement& agreement,
                                       Time durationId,
                                       WifiTxVector& blockAckTxVector,
                                       double rxSnr)
@@ -573,7 +592,7 @@ NrcFrameExchangeManager::SendBlockAck(const RecipientBlockAckAgreement& agreemen
 }
 
 void
-NrcFrameExchangeManager::SendNormalAck(const WifiMacHeader& hdr,
+TxsFrameExchangeManager::SendNormalAck(const WifiMacHeader& hdr,
                                        const WifiTxVector& dataTxVector,
                                        double dataSnr)
 {
@@ -581,8 +600,8 @@ NrcFrameExchangeManager::SendNormalAck(const WifiMacHeader& hdr,
 }
 
 void
-NrcFrameExchangeManager::SendCtsAfterMuRtsTxs(const WifiMacHeader& muRtsHdr,
-                                              const NrcCtrlTriggerHeader& trigger,
+TxsFrameExchangeManager::SendCtsAfterMuRtsTxs(const WifiMacHeader& muRtsHdr,
+                                              const TxsCtrlTriggerHeader& trigger,
                                               double muRtsSnr)
 {
     NS_LOG_FUNCTION(this << muRtsHdr << trigger << muRtsSnr);
@@ -632,7 +651,7 @@ NrcFrameExchangeManager::SendCtsAfterMuRtsTxs(const WifiMacHeader& muRtsHdr,
     // NS_LOG_INFO("Next TX time: " << nextTxInterval.GetMicroSeconds());
 
     Simulator::Schedule(nextTxInterval,
-                        &NrcFrameExchangeManager::StartTransmission,
+                        &TxsFrameExchangeManager::StartTransmission,
                         this,
                         m_edca,
                         allowedWidth);
@@ -648,27 +667,27 @@ NrcFrameExchangeManager::SendCtsAfterMuRtsTxs(const WifiMacHeader& muRtsHdr,
 }
 
 bool
-NrcFrameExchangeManager::SendMuRtsTxs(const WifiTxParameters& txParams)
+TxsFrameExchangeManager::SendMuRtsTxs(const WifiTxParameters& txParams)
 {
     NS_LOG_FUNCTION(this);
     return false;
 }
 
 void
-NrcFrameExchangeManager::SetTxsParams(Time txsDuration)
+TxsFrameExchangeManager::SetTxsParams(Time txsDuration)
 {
     m_txsParams.txsDuration = txsDuration;
     m_txsParams.txsStart = Simulator::Now();
 }
 
 TxsParams
-NrcFrameExchangeManager::GetTxsParams()
+TxsFrameExchangeManager::GetTxsParams()
 {
     return m_txsParams;
 }
 
 Time
-NrcFrameExchangeManager::GetRemainingTxsDuration() const
+TxsFrameExchangeManager::GetRemainingTxsDuration() const
 {
     Time elapsedTime = Simulator::Now() - m_txsParams.txsStart;
     Time remainingTxsDuration = m_txsParams.txsDuration - elapsedTime;
@@ -680,7 +699,7 @@ NrcFrameExchangeManager::GetRemainingTxsDuration() const
 }
 
 WifiTxVector
-NrcFrameExchangeManager::GetCtsTxVectorAfterMuRts(const NrcCtrlTriggerHeader& trigger,
+TxsFrameExchangeManager::GetCtsTxVectorAfterMuRts(const TxsCtrlTriggerHeader& trigger,
                                                   uint16_t staId) const
 {
     NS_LOG_FUNCTION(this << trigger << staId);
@@ -715,7 +734,7 @@ NrcFrameExchangeManager::GetCtsTxVectorAfterMuRts(const NrcCtrlTriggerHeader& tr
 }
 
 bool
-NrcFrameExchangeManager::StartTransmission(Ptr<QosTxop> edca, uint16_t allowedWidth)
+TxsFrameExchangeManager::StartTransmission(Ptr<QosTxop> edca, uint16_t allowedWidth)
 {
     if (m_navEnd > Simulator::Now())
     {
@@ -736,19 +755,20 @@ NrcFrameExchangeManager::StartTransmission(Ptr<QosTxop> edca, uint16_t allowedWi
     else
     {
         NS_LOG_INFO("Shared STA sends non-TB PPDU to AP");
+        m_initialFrame = false;
         return QosFrameExchangeManager::StartTransmission(edca, Seconds(0));
     }
 }
 
 void
-NrcFrameExchangeManager::CtsAfterMuRtsTxsTimeout(Ptr<WifiMpdu> muRts, const WifiTxVector& txVector)
+TxsFrameExchangeManager::CtsAfterMuRtsTxsTimeout(Ptr<WifiMpdu> muRts, const WifiTxVector& txVector)
 {
     NS_LOG_INFO("Current Time when running CtsTimeout: " << Simulator::Now().GetMicroSeconds());
     HeFrameExchangeManager::CtsAfterMuRtsTimeout(muRts, txVector);
 }
 
 void
-NrcFrameExchangeManager::CheckReGrantConditions(Ptr<const WifiMpdu> mpdu,
+TxsFrameExchangeManager::CheckReGrantConditions(Ptr<const WifiMpdu> mpdu,
                                                 const WifiTxVector& txVector)
 {
     // TODO : check the results of CS is idle
@@ -803,7 +823,7 @@ NrcFrameExchangeManager::CheckReGrantConditions(Ptr<const WifiMpdu> mpdu,
 }
 
 void
-NrcFrameExchangeManager::PostProcessFrame(Ptr<const WifiPsdu> psdu, const WifiTxVector& txVector)
+TxsFrameExchangeManager::PostProcessFrame(Ptr<const WifiPsdu> psdu, const WifiTxVector& txVector)
 {
     NS_LOG_FUNCTION(this << psdu << txVector);
 
@@ -811,13 +831,13 @@ NrcFrameExchangeManager::PostProcessFrame(Ptr<const WifiPsdu> psdu, const WifiTx
 
     if (psdu->GetNMpdus() == 1 && psdu->GetHeader(0).IsTrigger())
     {
-        NrcCtrlTriggerHeader commonInfoField(false);
+        TxsCtrlTriggerHeader commonInfoField(false);
         psdu->GetPayload(0)->PeekHeader(commonInfoField);
         if (commonInfoField.IsMuRts() &&
             ((commonInfoField.GetTxsMode() == TxsModes::MU_RTS_TXS_MODE_1) ||
              (commonInfoField.GetTxsMode() == TxsModes::MU_RTS_TXS_MODE_2)))
         {
-            NrcCtrlTriggerHeader trigger;
+            TxsCtrlTriggerHeader trigger;
             psdu->GetPayload(0)->PeekHeader(trigger);
             const WifiMacHeader& muRts = psdu->GetHeader(0);
 
@@ -854,19 +874,38 @@ NrcFrameExchangeManager::PostProcessFrame(Ptr<const WifiPsdu> psdu, const WifiTx
 }
 
 void
-NrcFrameExchangeManager::SetSharedStaAddress(Mac48Address macAddress)
+TxsFrameExchangeManager::TransmissionFailed()
+{
+    if (protectedFromMuRtsTxs == true)
+    {
+        m_initialFrame = true; // If the transmission of shared STA operting TXS mode 1 fails, it
+                               // releases the channel.
+        protectedFromMuRtsTxs = false;
+    }
+    EhtFrameExchangeManager::TransmissionFailed();
+}
+
+void
+TxsFrameExchangeManager::NotifyChannelReleased(Ptr<Txop> txop)
+{
+    protectedFromMuRtsTxs = false;
+    EhtFrameExchangeManager::NotifyChannelReleased(txop);
+}
+
+void
+TxsFrameExchangeManager::SetSharedStaAddress(Mac48Address macAddress)
 {
     m_sharedStaAddress = macAddress;
 }
 
 Mac48Address
-NrcFrameExchangeManager::GetSharedStaAddress() const
+TxsFrameExchangeManager::GetSharedStaAddress() const
 {
     return m_sharedStaAddress;
 }
 
 uint8_t
-NrcFrameExchangeManager::GetTidFromAc(AcIndex ac)
+TxsFrameExchangeManager::GetTidFromAc(AcIndex ac)
 {
     switch (ac)
     {
@@ -882,7 +921,7 @@ NrcFrameExchangeManager::GetTidFromAc(AcIndex ac)
     case AC_VO:
         return 6;
     default:
-        NS_ABORT_MSG("QoS service must be supported in NrcFunction");
+        NS_ABORT_MSG("QoS service must be supported in TxsFunction");
         return 8;
     }
 }

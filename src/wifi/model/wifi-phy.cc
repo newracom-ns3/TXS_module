@@ -1838,8 +1838,31 @@ WifiPhy::Send(WifiConstPsduMap psdus, const WifiTxVector& txVector)
         ppdu->SetTruncatedTx();
     }
 
-    m_endTxEvent =
-        Simulator::Schedule(txDuration, &WifiPhy::NotifyTxEnd, this, psdus); // TODO: fix for MU
+    // Time cumulatedDelay;
+    // Time avgDelay;
+    // uint32_t countAggregation = 0;
+    // if (psdus.begin()->second->GetHeader(0).IsQosData() &&
+    //     !(psdus.begin()->second->GetHeader(0).GetAddr1().IsBroadcast()))
+    // {
+    //     m_endTxEvent =
+    //         Simulator::Schedule(txDuration, &WifiPhy::NotifyTxEnd, this, psdus); // TODO: fix for
+    //         MU
+    //     WifiConstPsduMap::iterator itPsdu = psdus.begin();
+
+    //     while (itPsdu != psdus.end())
+    //     {
+    //         std::vector<Ptr<WifiMpdu>>::const_iterator itMpdu = itPsdu->second->begin();
+
+    //         while ((*itMpdu) != *(itPsdu->second->end()))
+    //         {
+    //             cumulatedDelay += Simulator::Now() - (*itMpdu)->GetTimestamp();
+    //             countAggregation += 1;
+    //             ++itMpdu;
+    //         }
+    //         ++itPsdu;
+    //     }
+    //     avgDelay = cumulatedDelay / countAggregation;
+    // }
 
     StartTx(ppdu);
     ppdu->ResetTxVector();

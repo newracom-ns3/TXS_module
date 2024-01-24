@@ -1,14 +1,34 @@
-#ifndef NRC_FRAME_EXCHANGE_MANAGER_H
-#define NRC_FRAME_EXCHANGE_MANAGER_H
+/*
+ * Copyright (c) 2024 Newracom
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation;
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * Author: Seungmin Lee <sm.lee@newratek.com>
+ *         Changmin Lee <cm.lee@newratek.com>
+ */
 
-#include "nrc-ctrl-headers.h"
+#ifndef TXS_FRAME_EXCHANGE_MANAGER_H
+#define TXS_FRAME_EXCHANGE_MANAGER_H
+
+#include "txs-ctrl-headers.h"
 
 #include "ns3/eht-frame-exchange-manager.h"
 
 // Add a doxygen group for this module.
 // If you have more than one file, this should be in only one of them.
 /**
- * \defgroup nrc-module Description of the nrc-module
+ * \defgroup txs-module Description of the txs-module
  */
 
 namespace ns3
@@ -26,12 +46,12 @@ struct TxsParams
     Time txsStart{0};
 };
 
-class NrcFrameExchangeManager : public EhtFrameExchangeManager
+class TxsFrameExchangeManager : public EhtFrameExchangeManager
 {
   public:
     static TypeId GetTypeId();
-    NrcFrameExchangeManager();
-    ~NrcFrameExchangeManager() override;
+    TxsFrameExchangeManager();
+    ~TxsFrameExchangeManager() override;
 
   protected:
     void DoDispose() override;
@@ -44,12 +64,12 @@ class NrcFrameExchangeManager : public EhtFrameExchangeManager
 
     bool StartFrameExchange(Ptr<QosTxop> edca, Time availableTime, bool initialFrame) override;
     bool SendMuRtsTxs(const Mac48Address& receiver, const Time availableTime);
-    WifiTxVector GetCtsTxVectorAfterMuRts(const NrcCtrlTriggerHeader& trigger,
+    WifiTxVector GetCtsTxVectorAfterMuRts(const TxsCtrlTriggerHeader& trigger,
                                           uint16_t staId) const;
     void CtsAfterMuRtsTxsTimeout(Ptr<WifiMpdu> muRts, const WifiTxVector& txVector);
     void CheckReGrantConditions(Ptr<const WifiMpdu> mpdu, const WifiTxVector& txVector);
 
-    Time CalculateMuRtsTxDuration(const NrcCtrlTriggerHeader& muRtsTxs,
+    Time CalculateMuRtsTxDuration(const TxsCtrlTriggerHeader& muRtsTxs,
                                   const WifiTxVector& muRtsTxsTxVector,
                                   const WifiMacHeader& hdr) const;
     void ReceiveMpdu(Ptr<const WifiMpdu> mpdu,
@@ -61,7 +81,7 @@ class NrcFrameExchangeManager : public EhtFrameExchangeManager
                          const WifiTxVector& txVector,
                          const std::vector<bool>& perMpduStatus) override;
     void SendCtsAfterMuRtsTxs(const WifiMacHeader& muRtsHdr,
-                              const NrcCtrlTriggerHeader& trigger,
+                              const TxsCtrlTriggerHeader& trigger,
                               double muRtsSnr);
     bool IsInValid(Ptr<const WifiMpdu> mpdu) const;
     void SetImaginaryPsdu();
@@ -85,19 +105,22 @@ class NrcFrameExchangeManager : public EhtFrameExchangeManager
                       const Mac48Address& macAddress,
                       Time duration);
     void PostProcessFrame(Ptr<const WifiPsdu> psdu, const WifiTxVector& txVector);
+    void TransmissionFailed() override;
+    void NotifyChannelReleased(Ptr<Txop> txop) override;
 
   private:
     WifiTxParameters m_txParams; //!< the TX parameters for the MU-RTX TXS frame;
     Mac48Address m_sharedStaAddress;
     TxsParams m_txsParams;
+    TracedValue<uint32_t> txsCount;
     uint8_t GetTidFromAc(AcIndex ac);
 };
 
 // Each class should be documented using Doxygen,
-// and have an \ingroup nrc-module directive
+// and have an \ingroup txs-module directive
 
 /* ... */
 
 } // namespace ns3
 
-#endif /* NRC_FRAME_EXCHANGE_MANAGER_H */
+#endif /* TXS_FRAME_EXCHANGE_MANAGER_H */

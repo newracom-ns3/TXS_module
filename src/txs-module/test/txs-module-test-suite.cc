@@ -1,7 +1,4 @@
 
-// Include a header file from your module to test.
-#include "ns3/nrc-module.h"
-
 // An essential include is test.h
 #include "ns3/test.h"
 
@@ -12,35 +9,35 @@ using namespace ns3;
 // Add a doxygen group for tests.
 // If you have more than one test, this should be in only one of them.
 /**
- * \defgroup nrc-module-tests Tests for nrc-module
- * \ingroup nrc-module
+ * \defgroup txs-module-tests Tests for txs-module
+ * \ingroup txs-module
  * \ingroup tests
  */
 
 // This is an example TestCase.
 /**
- * \ingroup nrc-module-tests
+ * \ingroup txs-module-tests
  * Test case for feature 1
  */
-class NrcModuleTestCase1 : public TestCase
+class TxsModuleTestCase1 : public TestCase
 {
   public:
-    NrcModuleTestCase1();
-    virtual ~NrcModuleTestCase1();
+    TxsModuleTestCase1();
+    virtual ~TxsModuleTestCase1();
 
   private:
     void DoRun() override;
 };
 
 // Add some help text to this case to describe what it is intended to test
-NrcModuleTestCase1::NrcModuleTestCase1()
-    : TestCase("NrcModule test case (does nothing)")
+TxsModuleTestCase1::TxsModuleTestCase1()
+    : TestCase("TxsModule test case (does nothing)")
 {
 }
 
 // This destructor does nothing but we include it as a reminder that
 // the test case should clean up after itself
-NrcModuleTestCase1::~NrcModuleTestCase1()
+TxsModuleTestCase1::~TxsModuleTestCase1()
 {
 }
 
@@ -49,7 +46,7 @@ NrcModuleTestCase1::~NrcModuleTestCase1()
 // TestCase must implement
 //
 void
-NrcModuleTestCase1::DoRun()
+TxsModuleTestCase1::DoRun()
 {
     // A wide variety of test macros are available in src/core/test.h
     NS_TEST_ASSERT_MSG_EQ(true, true, "true doesn't equal true for some reason");
@@ -62,25 +59,25 @@ NrcModuleTestCase1::DoRun()
 // this class must be defined
 
 /**
- * \ingroup nrc-module-tests
- * TestSuite for module nrc-module
+ * \ingroup txs-module-tests
+ * TestSuite for module txs-module
  */
-class NrcModuleTestSuite : public TestSuite
+class TxsModuleTestSuite : public TestSuite
 {
   public:
-    NrcModuleTestSuite();
+    TxsModuleTestSuite();
 };
 
-NrcModuleTestSuite::NrcModuleTestSuite()
-    : TestSuite("nrc-module", UNIT)
+TxsModuleTestSuite::TxsModuleTestSuite()
+    : TestSuite("txs-module", UNIT)
 {
     // TestDuration for TestCase can be QUICK, EXTENSIVE or TAKES_FOREVER
-    AddTestCase(new NrcModuleTestCase1, TestCase::QUICK);
+    AddTestCase(new TxsModuleTestCase1, TestCase::QUICK);
 }
 
 // Do not forget to allocate an instance of this TestSuite
 /**
- * \ingroup nrc-module-tests
+ * \ingroup txs-module-tests
  * Static variable for test initialization
  */
-static NrcModuleTestSuite snrcModuleTestSuite;
+static TxsModuleTestSuite stxsModuleTestSuite;

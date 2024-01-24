@@ -924,7 +924,6 @@ void
 FrameExchangeManager::NotifyChannelReleased(Ptr<Txop> txop)
 {
     NS_LOG_FUNCTION(this << txop);
-    protectedFromMuRtsTxs = false;
     txop->NotifyChannelReleased(m_linkId);
     m_protectedStas.clear();
 }

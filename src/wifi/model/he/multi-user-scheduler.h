@@ -190,7 +190,7 @@ class MultiUserScheduler : public Object
     uint8_t m_linkId;        //!< the ID of the link over which channel access has been granted
 
   private:
-    friend class NrcMultiUserScheduler;
+    friend class TxsMultiUserScheduler;
     /**
      * Set the wifi MAC. Note that it must be the MAC of an HE AP.
      *

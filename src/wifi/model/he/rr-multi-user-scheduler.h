@@ -57,7 +57,7 @@ class RrMultiUserScheduler : public MultiUserScheduler
     void DoInitialize() override;
 
   private:
-    friend class NrcMultiUserScheduler;
+    friend class TxsMultiUserScheduler;
     TxFormat SelectTxFormat() override;
     DlMuInfo ComputeDlMuInfo() override;
     UlMuInfo ComputeUlMuInfo() override;

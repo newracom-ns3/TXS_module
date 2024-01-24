@@ -34,7 +34,7 @@ jobs:
           ccache -z
       - name: Configure CMake
         run: |
-          ./ns3 configure -d release --enable-asserts --enable-examples --enable-tests --disable-werror -G"Ninja"
+          ./ns3 configure -d release --enable-asserts --enable-tests --disable-werror -G"Ninja"
       - name: Build ns-3
         run: |
           ./ns3 build
@@ -87,7 +87,7 @@ jobs:
   #         ccache -z
   #     - name: Configure CMake
   #       run: |
-  #         ./ns3 configure -d release --enable-asserts --enable-examples --enable-tests --disable-werror -G"Ninja"
+  #         ./ns3 configure -d release --enable-asserts --enable-tests --disable-werror -G"Ninja"
   #     - name: Build ns-3
   #       run: |
   #         ./ns3 build
@@ -127,7 +127,7 @@ jobs:
           ccache -z
       - name: Configure CMake
         run: |
-          ./ns3 configure --enable-asserts --enable-examples --enable-tests --disable-werror --enable-gcov -G"Ninja"
+          ./ns3 configure --enable-asserts --enable-tests --disable-werror --enable-gcov -G"Ninja"
       - name: Build ns-3
         run: |
           ./ns3 build
@@ -186,7 +186,7 @@ jobs:
           ccache -z
       - name: Configure CMake
         run: |
-          python3 ns3 configure -d release --enable-asserts --enable-examples --enable-tests --disable-werror -G"Ninja"
+          python3 ns3 configure -d release --enable-asserts --enable-tests --disable-werror -G"Ninja"
       - name: Build ns-3
         run: |
           python3 ns3 build
@@ -226,7 +226,7 @@ jobs:
       - name: Configure CMake
         run: |
           export PATH=/usr/local/bin:$PATH #:/usr/local/opt/qt/bin
-          ./ns3 configure -d release --enable-asserts --enable-examples --enable-tests --disable-werror -G"Ninja"
+          ./ns3 configure -d release --enable-asserts --enable-tests --disable-werror -G"Ninja"
       - name: Build ns-3
         run: |
           export PATH="$PATH" #:/usr/local/opt/qt/bin

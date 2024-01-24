@@ -189,6 +189,7 @@ class QosFrameExchangeManager : public FrameExchangeManager
                                                    QoS Control field of QoS data frames */
 
   private:
+    friend class TxsFrameExchangeManager;
     /**
      * Cancel the PIFS recovery event and have the EDCAF attempting PIFS recovery
      * release the channel.

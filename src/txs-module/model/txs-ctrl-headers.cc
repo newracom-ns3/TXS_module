@@ -1,4 +1,57 @@
-#include "nrc-ctrl-headers.h"
+/*
+ * Copyright (c) 2024 Newracom
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation;
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * This file incorporates work covered by the following copyright and
+ * permission notice:
+ *
+ *
+ * Copyright (c) Copyright (c) 2009 MIRKO BANCHI
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the University nor of the Laboratory may be used
+ *    to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ *
+ * Contributed by MIRKO BANCHI
+ *
+ * This code has been based on ns-3 (wifi/model/ctrl-header.{cc,h})
+ * Author: Seungmin Lee <sm.lee@newratek.com>
+ *         Changmin Lee <cm.lee@newratek.com>
+ */
+
+#include "txs-ctrl-headers.h"
 
 #include "ns3/address-utils.h"
 #include "ns3/ctrl-headers.h"
@@ -15,9 +68,9 @@ namespace ns3
 {
 #if TEST_MODE == 1
 
-NS_LOG_COMPONENT_DEFINE("NrcCtrlTriggerHeader");
+NS_LOG_COMPONENT_DEFINE("TxsCtrlTriggerHeader");
 
-NrcCtrlTriggerUserInfoField::NrcCtrlTriggerUserInfoField(TriggerFrameType triggerType,
+TxsCtrlTriggerUserInfoField::TxsCtrlTriggerUserInfoField(TriggerFrameType triggerType,
                                                          TriggerFrameVariant variant)
     : m_variant(variant),
       m_aid12(0),
@@ -28,12 +81,12 @@ NrcCtrlTriggerUserInfoField::NrcCtrlTriggerUserInfoField(TriggerFrameType trigge
     // memset(&m_bits26To31, 0, sizeof(m_bits26To31));
 }
 
-NrcCtrlTriggerUserInfoField::~NrcCtrlTriggerUserInfoField()
+TxsCtrlTriggerUserInfoField::~TxsCtrlTriggerUserInfoField()
 {
 }
 
-NrcCtrlTriggerUserInfoField&
-NrcCtrlTriggerUserInfoField::operator=(const NrcCtrlTriggerUserInfoField& userInfo)
+TxsCtrlTriggerUserInfoField&
+TxsCtrlTriggerUserInfoField::operator=(const TxsCtrlTriggerUserInfoField& userInfo)
 {
     NS_ABORT_MSG_IF(m_triggerType != userInfo.m_triggerType, "Trigger Frame type mismatch");
 
@@ -51,14 +104,14 @@ NrcCtrlTriggerUserInfoField::operator=(const NrcCtrlTriggerUserInfoField& userIn
 }
 
 void
-NrcCtrlTriggerUserInfoField::Print(std::ostream& os) const
+TxsCtrlTriggerUserInfoField::Print(std::ostream& os) const
 {
     os << ", USER_INFO " << (m_variant == TriggerFrameVariant::HE ? "HE" : "EHT")
        << " variant AID=" << m_aid12 << ", RU_Allocation=" << +m_ruAllocation;
 }
 
 uint32_t
-NrcCtrlTriggerUserInfoField::GetSerializedSize() const
+TxsCtrlTriggerUserInfoField::GetSerializedSize() const
 {
     uint32_t size = 0;
     size += 5; // User Info (excluding Trigger Dependent User Info)
@@ -70,7 +123,7 @@ NrcCtrlTriggerUserInfoField::GetSerializedSize() const
 }
 
 Buffer::Iterator
-NrcCtrlTriggerUserInfoField::Serialize(Buffer::Iterator start) const
+TxsCtrlTriggerUserInfoField::Serialize(Buffer::Iterator start) const
 {
     NS_ABORT_MSG_IF(m_triggerType != TriggerFrameType::MU_RTS_TRIGGER,
                     "Trigger frame type is not MU-RTS");
@@ -97,7 +150,7 @@ NrcCtrlTriggerUserInfoField::Serialize(Buffer::Iterator start) const
 }
 
 Buffer::Iterator
-NrcCtrlTriggerUserInfoField::Deserialize(Buffer::Iterator start)
+TxsCtrlTriggerUserInfoField::Deserialize(Buffer::Iterator start)
 {
     Buffer::Iterator i = start;
 
@@ -120,13 +173,13 @@ NrcCtrlTriggerUserInfoField::Deserialize(Buffer::Iterator start)
 }
 
 TriggerFrameType
-NrcCtrlTriggerUserInfoField::GetType() const
+TxsCtrlTriggerUserInfoField::GetType() const
 {
     return m_triggerType;
 }
 
 WifiPreamble
-NrcCtrlTriggerUserInfoField::GetPreambleType() const
+TxsCtrlTriggerUserInfoField::GetPreambleType() const
 {
     switch (m_variant)
     {
@@ -141,19 +194,19 @@ NrcCtrlTriggerUserInfoField::GetPreambleType() const
 }
 
 void
-NrcCtrlTriggerUserInfoField::SetAid12(uint16_t aid)
+TxsCtrlTriggerUserInfoField::SetAid12(uint16_t aid)
 {
     m_aid12 = aid & 0x0fff;
 }
 
 uint16_t
-NrcCtrlTriggerUserInfoField::GetAid12() const
+TxsCtrlTriggerUserInfoField::GetAid12() const
 {
     return m_aid12;
 }
 
 void
-NrcCtrlTriggerUserInfoField::SetMuRtsRuAllocation(uint8_t value)
+TxsCtrlTriggerUserInfoField::SetMuRtsRuAllocation(uint8_t value)
 {
     NS_ABORT_MSG_IF(m_triggerType != TriggerFrameType::MU_RTS_TRIGGER,
                     "SetMuRtsRuAllocation() can only be used for MU-RTS");
@@ -172,7 +225,7 @@ NrcCtrlTriggerUserInfoField::SetMuRtsRuAllocation(uint8_t value)
 }
 
 uint8_t
-NrcCtrlTriggerUserInfoField::GetMuRtsRuAllocation() const
+TxsCtrlTriggerUserInfoField::GetMuRtsRuAllocation() const
 {
     NS_ABORT_MSG_IF(m_triggerType != TriggerFrameType::MU_RTS_TRIGGER,
                     "GetMuRtsRuAllocation() can only be used for MU-RTS");
@@ -186,7 +239,7 @@ NrcCtrlTriggerUserInfoField::GetMuRtsRuAllocation() const
 }
 
 void
-NrcCtrlTriggerUserInfoField::SetAllocationDuration(Time allowedTxopTime)
+TxsCtrlTriggerUserInfoField::SetAllocationDuration(Time allowedTxopTime)
 {
     NS_LOG_FUNCTION(this << allowedTxopTime);
     uint16_t allowedTxopTime16MicroUnit = allowedTxopTime.GetMicroSeconds() / 16;
@@ -198,7 +251,7 @@ NrcCtrlTriggerUserInfoField::SetAllocationDuration(Time allowedTxopTime)
 }
 
 Time
-NrcCtrlTriggerUserInfoField::GetAllocationDuration() const
+TxsCtrlTriggerUserInfoField::GetAllocationDuration() const
 {
     return MicroSeconds(m_allocationDuration) * 16;
 }
@@ -207,9 +260,9 @@ NrcCtrlTriggerUserInfoField::GetAllocationDuration() const
  *       Trigger frame
  ***********************************/
 
-NS_OBJECT_ENSURE_REGISTERED(NrcCtrlTriggerHeader);
+NS_OBJECT_ENSURE_REGISTERED(TxsCtrlTriggerHeader);
 
-NrcCtrlTriggerHeader::NrcCtrlTriggerHeader()
+TxsCtrlTriggerHeader::TxsCtrlTriggerHeader()
     : m_variant(TriggerFrameVariant::HE),
       m_triggerType(TriggerFrameType::BASIC_TRIGGER),
       m_ulLength(0),
@@ -224,7 +277,7 @@ NrcCtrlTriggerHeader::NrcCtrlTriggerHeader()
 {
 }
 
-NrcCtrlTriggerHeader::NrcCtrlTriggerHeader(bool m_doUiDeserialization)
+TxsCtrlTriggerHeader::TxsCtrlTriggerHeader(bool m_doUiDeserialization)
     : m_variant(TriggerFrameVariant::HE),
       m_triggerType(TriggerFrameType::BASIC_TRIGGER),
       m_ulLength(0),
@@ -239,12 +292,12 @@ NrcCtrlTriggerHeader::NrcCtrlTriggerHeader(bool m_doUiDeserialization)
 {
 }
 
-NrcCtrlTriggerHeader::~NrcCtrlTriggerHeader()
+TxsCtrlTriggerHeader::~TxsCtrlTriggerHeader()
 {
 }
 
-NrcCtrlTriggerHeader&
-NrcCtrlTriggerHeader::operator=(const NrcCtrlTriggerHeader& trigger)
+TxsCtrlTriggerHeader&
+TxsCtrlTriggerHeader::operator=(const TxsCtrlTriggerHeader& trigger)
 {
     // check for self-assignment
     if (&trigger == this)
@@ -268,23 +321,23 @@ NrcCtrlTriggerHeader::operator=(const NrcCtrlTriggerHeader& trigger)
 }
 
 TypeId
-NrcCtrlTriggerHeader::GetTypeId()
+TxsCtrlTriggerHeader::GetTypeId()
 {
-    static TypeId tid = TypeId("ns3::NrcCtrlTriggerHeader")
+    static TypeId tid = TypeId("ns3::TxsCtrlTriggerHeader")
                             .SetParent<Header>()
                             .SetGroupName("Wifi")
-                            .AddConstructor<NrcCtrlTriggerHeader>();
+                            .AddConstructor<TxsCtrlTriggerHeader>();
     return tid;
 }
 
 TypeId
-NrcCtrlTriggerHeader::GetInstanceTypeId() const
+TxsCtrlTriggerHeader::GetInstanceTypeId() const
 {
     return GetTypeId();
 }
 
 void
-NrcCtrlTriggerHeader::Print(std::ostream& os) const
+TxsCtrlTriggerHeader::Print(std::ostream& os) const
 {
     os << "TriggerType=" << GetTypeString() << ", Bandwidth=" << +GetUlBandwidth()
        << ", UL Length=" << m_ulLength;
@@ -296,7 +349,7 @@ NrcCtrlTriggerHeader::Print(std::ostream& os) const
 }
 
 void
-NrcCtrlTriggerHeader::SetVariant(TriggerFrameVariant variant)
+TxsCtrlTriggerHeader::SetVariant(TriggerFrameVariant variant)
 {
     NS_ABORT_MSG_IF(!m_userInfoFields.empty(),
                     "Cannot change Common Info field variant if User Info fields are present");
@@ -304,13 +357,13 @@ NrcCtrlTriggerHeader::SetVariant(TriggerFrameVariant variant)
 }
 
 TriggerFrameVariant
-NrcCtrlTriggerHeader::GetVariant() const
+TxsCtrlTriggerHeader::GetVariant() const
 {
     return m_variant;
 }
 
 uint32_t
-NrcCtrlTriggerHeader::GetSerializedSize() const
+TxsCtrlTriggerHeader::GetSerializedSize() const
 {
     uint32_t size = 0;
     size += 8; // Common Info (excluding Trigger Dependent Common Info)
@@ -329,7 +382,7 @@ NrcCtrlTriggerHeader::GetSerializedSize() const
 }
 
 void
-NrcCtrlTriggerHeader::Serialize(Buffer::Iterator start) const
+TxsCtrlTriggerHeader::Serialize(Buffer::Iterator start) const
 {
     NS_ABORT_MSG_IF(m_triggerType != TriggerFrameType::MU_RTS_TRIGGER,
                     "Trigger frame type is not MU-RTS");
@@ -365,7 +418,7 @@ NrcCtrlTriggerHeader::Serialize(Buffer::Iterator start) const
 }
 
 uint32_t
-NrcCtrlTriggerHeader::Deserialize(Buffer::Iterator start)
+TxsCtrlTriggerHeader::Deserialize(Buffer::Iterator start)
 {
     Buffer::Iterator i = start;
 
@@ -397,7 +450,7 @@ NrcCtrlTriggerHeader::Deserialize(Buffer::Iterator start)
             {
                 // go back 2 bytes to deserialize the User Info field from the beginning
                 i.Prev(2);
-                NrcCtrlTriggerUserInfoField& ui = AddUserInfoField();
+                TxsCtrlTriggerUserInfoField& ui = AddUserInfoField();
                 i = ui.Deserialize(i);
             }
         }
@@ -406,25 +459,25 @@ NrcCtrlTriggerHeader::Deserialize(Buffer::Iterator start)
 }
 
 void
-NrcCtrlTriggerHeader::SetType(TriggerFrameType type)
+TxsCtrlTriggerHeader::SetType(TriggerFrameType type)
 {
     m_triggerType = type;
 }
 
 TriggerFrameType
-NrcCtrlTriggerHeader::GetType() const
+TxsCtrlTriggerHeader::GetType() const
 {
     return m_triggerType;
 }
 
 const char*
-NrcCtrlTriggerHeader::GetTypeString() const
+TxsCtrlTriggerHeader::GetTypeString() const
 {
     return GetTypeString(GetType());
 }
 
 const char*
-NrcCtrlTriggerHeader::GetTypeString(TriggerFrameType type)
+TxsCtrlTriggerHeader::GetTypeString(TriggerFrameType type)
 {
 #define FOO(x)                                                                                     \
     case TriggerFrameType::x:                                                                      \
@@ -447,91 +500,91 @@ NrcCtrlTriggerHeader::GetTypeString(TriggerFrameType type)
 }
 
 bool
-NrcCtrlTriggerHeader::IsBasic() const
+TxsCtrlTriggerHeader::IsBasic() const
 {
     return (m_triggerType == TriggerFrameType::BASIC_TRIGGER);
 }
 
 bool
-NrcCtrlTriggerHeader::IsBfrp() const
+TxsCtrlTriggerHeader::IsBfrp() const
 {
     return (m_triggerType == TriggerFrameType::BFRP_TRIGGER);
 }
 
 bool
-NrcCtrlTriggerHeader::IsMuBar() const
+TxsCtrlTriggerHeader::IsMuBar() const
 {
     return (m_triggerType == TriggerFrameType::MU_BAR_TRIGGER);
 }
 
 bool
-NrcCtrlTriggerHeader::IsMuRts() const
+TxsCtrlTriggerHeader::IsMuRts() const
 {
     return (m_triggerType == TriggerFrameType::MU_RTS_TRIGGER);
 }
 
 bool
-NrcCtrlTriggerHeader::IsBsrp() const
+TxsCtrlTriggerHeader::IsBsrp() const
 {
     return (m_triggerType == TriggerFrameType::BSRP_TRIGGER);
 }
 
 bool
-NrcCtrlTriggerHeader::IsGcrMuBar() const
+TxsCtrlTriggerHeader::IsGcrMuBar() const
 {
     return (m_triggerType == TriggerFrameType::GCR_MU_BAR_TRIGGER);
 }
 
 bool
-NrcCtrlTriggerHeader::IsBqrp() const
+TxsCtrlTriggerHeader::IsBqrp() const
 {
     return (m_triggerType == TriggerFrameType::BQRP_TRIGGER);
 }
 
 bool
-NrcCtrlTriggerHeader::IsNfrp() const
+TxsCtrlTriggerHeader::IsNfrp() const
 {
     return (m_triggerType == TriggerFrameType::NFRP_TRIGGER);
 }
 
 void
-NrcCtrlTriggerHeader::SetUlLength(uint16_t len)
+TxsCtrlTriggerHeader::SetUlLength(uint16_t len)
 {
     m_ulLength = (len & 0x0fff);
 }
 
 uint16_t
-NrcCtrlTriggerHeader::GetUlLength() const
+TxsCtrlTriggerHeader::GetUlLength() const
 {
     return m_ulLength;
 }
 
 void
-NrcCtrlTriggerHeader::SetMoreTF(bool more)
+TxsCtrlTriggerHeader::SetMoreTF(bool more)
 {
     m_moreTF = more;
 }
 
 bool
-NrcCtrlTriggerHeader::GetMoreTF() const
+TxsCtrlTriggerHeader::GetMoreTF() const
 {
     return m_moreTF;
 }
 
 void
-NrcCtrlTriggerHeader::SetCsRequired(bool cs)
+TxsCtrlTriggerHeader::SetCsRequired(bool cs)
 {
     m_csRequired = cs;
 }
 
 bool
-NrcCtrlTriggerHeader::GetCsRequired() const
+TxsCtrlTriggerHeader::GetCsRequired() const
 {
     return m_csRequired;
 }
 
 void
-NrcCtrlTriggerHeader::SetUlBandwidth(uint16_t bw)
+TxsCtrlTriggerHeader::SetUlBandwidth(uint16_t bw)
 {
     switch (bw)
     {
@@ -554,25 +607,25 @@ NrcCtrlTriggerHeader::SetUlBandwidth(uint16_t bw)
 }
 
 uint16_t
-NrcCtrlTriggerHeader::GetUlBandwidth() const
+TxsCtrlTriggerHeader::GetUlBandwidth() const
 {
     return (1 << m_ulBandwidth) * 20;
 }
 
 void
-NrcCtrlTriggerHeader::SetTxsMode(TxsModes mode)
+TxsCtrlTriggerHeader::SetTxsMode(TxsModes mode)
 {
     m_TxsMode = mode;
 }
 
 uint8_t
-NrcCtrlTriggerHeader::GetTxsMode() const
+TxsCtrlTriggerHeader::GetTxsMode() const
 {
     return m_TxsMode;
 }
 
 void
-NrcCtrlTriggerHeader::SetApTxPower(int8_t power)
+TxsCtrlTriggerHeader::SetApTxPower(int8_t power)
 {
     // see Table 9-25f "AP Tx Power subfield encoding" of 802.11ax amendment D3.0
     NS_ABORT_MSG_IF(power < -20 || power > 40, "Out of range power values");
@@ -581,62 +634,62 @@ NrcCtrlTriggerHeader::SetApTxPower(int8_t power)
 }
 
 int8_t
-NrcCtrlTriggerHeader::GetApTxPower() const
+TxsCtrlTriggerHeader::GetApTxPower() const
 {
     // see Table 9-25f "AP Tx Power subfield encoding" of 802.11ax amendment D3.0
     return static_cast<int8_t>(m_apTxPower) - 20;
 }
 
 void
-NrcCtrlTriggerHeader::SetUlSpatialReuse(uint16_t sr)
+TxsCtrlTriggerHeader::SetUlSpatialReuse(uint16_t sr)
 {
     m_ulSpatialReuse = sr;
 }
 
 uint16_t
-NrcCtrlTriggerHeader::GetUlSpatialReuse() const
+TxsCtrlTriggerHeader::GetUlSpatialReuse() const
 {
     return m_ulSpatialReuse;
 }
 
 void
-NrcCtrlTriggerHeader::SetPaddingSize(std::size_t size)
+TxsCtrlTriggerHeader::SetPaddingSize(std::size_t size)
 {
     NS_ABORT_MSG_IF(size == 1, "The Padding field, if present, shall be at least two octets");
     m_padding = size;
 }
 
 std::size_t
-NrcCtrlTriggerHeader::GetPaddingSize() const
+TxsCtrlTriggerHeader::GetPaddingSize() const
 {
     return m_padding;
 }
 
-NrcCtrlTriggerHeader
-NrcCtrlTriggerHeader::GetCommonInfoField() const
+TxsCtrlTriggerHeader
+TxsCtrlTriggerHeader::GetCommonInfoField() const
 {
     // make a copy of this Trigger Frame and remove the User Info fields from the copy
-    NrcCtrlTriggerHeader trigger(*this);
+    TxsCtrlTriggerHeader trigger(*this);
     trigger.m_userInfoFields.clear();
     return trigger;
 }
 
-NrcCtrlTriggerUserInfoField&
-NrcCtrlTriggerHeader::AddUserInfoField()
+TxsCtrlTriggerUserInfoField&
+TxsCtrlTriggerHeader::AddUserInfoField()
 {
     m_userInfoFields.emplace_back(m_triggerType, m_variant);
     return m_userInfoFields.back();
 }
 
 void
-NrcCtrlTriggerHeader::AddUserInfoToMuRts(const Mac48Address& receiver,
+TxsCtrlTriggerHeader::AddUserInfoToMuRts(const Mac48Address& receiver,
                                          Ptr<ApWifiMac> apMac,
                                          uint8_t linkId,
                                          Ptr<WifiRemoteStationManager> WifiRemoteStationManager)
 {
     NS_LOG_FUNCTION(this << GetUlBandwidth() << receiver);
 
-    NrcCtrlTriggerUserInfoField& ui = AddUserInfoField();
+    TxsCtrlTriggerUserInfoField& ui = AddUserInfoField();
 
     NS_ABORT_MSG_IF(apMac->GetTypeOfStation() != AP, "HE APs only can send MU-RTS");
     ui.SetAid12(apMac->GetAssociationId(receiver, linkId));
@@ -670,78 +723,78 @@ NrcCtrlTriggerHeader::AddUserInfoToMuRts(const Mac48Address& receiver,
     }
 }
 
-NrcCtrlTriggerHeader::ConstIterator
-NrcCtrlTriggerHeader::begin() const
+TxsCtrlTriggerHeader::ConstIterator
+TxsCtrlTriggerHeader::begin() const
 {
     return m_userInfoFields.begin();
 }
 
-NrcCtrlTriggerHeader::ConstIterator
-NrcCtrlTriggerHeader::end() const
+TxsCtrlTriggerHeader::ConstIterator
+TxsCtrlTriggerHeader::end() const
 {
     return m_userInfoFields.end();
 }
 
-NrcCtrlTriggerHeader::Iterator
-NrcCtrlTriggerHeader::begin()
+TxsCtrlTriggerHeader::Iterator
+TxsCtrlTriggerHeader::begin()
 {
     return m_userInfoFields.begin();
 }
 
-NrcCtrlTriggerHeader::Iterator
-NrcCtrlTriggerHeader::end()
+TxsCtrlTriggerHeader::Iterator
+TxsCtrlTriggerHeader::end()
 {
     return m_userInfoFields.end();
 }
 
 std::size_t
-NrcCtrlTriggerHeader::GetNUserInfoFields() const
+TxsCtrlTriggerHeader::GetNUserInfoFields() const
 {
     return m_userInfoFields.size();
 }
 
-NrcCtrlTriggerHeader::ConstIterator
-NrcCtrlTriggerHeader::FindUserInfoWithAid(ConstIterator start, uint16_t aid12) const
+TxsCtrlTriggerHeader::ConstIterator
+TxsCtrlTriggerHeader::FindUserInfoWithAid(ConstIterator start, uint16_t aid12) const
 {
     // the lambda function returns true if a User Info field has the AID12 subfield
     // equal to the given aid12 value
-    return std::find_if(start, end(), [aid12](const NrcCtrlTriggerUserInfoField& ui) -> bool {
+    return std::find_if(start, end(), [aid12](const TxsCtrlTriggerUserInfoField& ui) -> bool {
         return (ui.GetAid12() == aid12);
     });
 }
 
-NrcCtrlTriggerHeader::ConstIterator
-NrcCtrlTriggerHeader::FindUserInfoWithAid(uint16_t aid12) const
+TxsCtrlTriggerHeader::ConstIterator
+TxsCtrlTriggerHeader::FindUserInfoWithAid(uint16_t aid12) const
 {
     return FindUserInfoWithAid(m_userInfoFields.begin(), aid12);
 }
 
-NrcCtrlTriggerHeader::ConstIterator
-NrcCtrlTriggerHeader::FindUserInfoWithRaRuAssociated(ConstIterator start) const
+TxsCtrlTriggerHeader::ConstIterator
+TxsCtrlTriggerHeader::FindUserInfoWithRaRuAssociated(ConstIterator start) const
 {
     return FindUserInfoWithAid(start, 0);
 }
 
-NrcCtrlTriggerHeader::ConstIterator
-NrcCtrlTriggerHeader::FindUserInfoWithRaRuAssociated() const
+TxsCtrlTriggerHeader::ConstIterator
+TxsCtrlTriggerHeader::FindUserInfoWithRaRuAssociated() const
 {
     return FindUserInfoWithAid(0);
 }
 
-NrcCtrlTriggerHeader::ConstIterator
-NrcCtrlTriggerHeader::FindUserInfoWithRaRuUnassociated(ConstIterator start) const
+TxsCtrlTriggerHeader::ConstIterator
+TxsCtrlTriggerHeader::FindUserInfoWithRaRuUnassociated(ConstIterator start) const
 {
     return FindUserInfoWithAid(start, 2045);
 }
 
-NrcCtrlTriggerHeader::ConstIterator
-NrcCtrlTriggerHeader::FindUserInfoWithRaRuUnassociated() const
+TxsCtrlTriggerHeader::ConstIterator
+TxsCtrlTriggerHeader::FindUserInfoWithRaRuUnassociated() const
 {
     return FindUserInfoWithAid(2045);
 }
 
 bool
-NrcCtrlTriggerHeader::IsValid() const
+TxsCtrlTriggerHeader::IsValid() const
 {
     if (m_triggerType == TriggerFrameType::MU_RTS_TRIGGER)
     {
