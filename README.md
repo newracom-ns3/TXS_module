@@ -1,3 +1,9 @@
+# (IEEE 802.11be) Triggered TXOP sharing (TXS) mode 1 Simulator 
+* [Overview]
+* [Cmake Configuration]
+* [Running TXS module]
+* [Notification]
+
 # The Network Simulator, Version 3
 
 [![codecov](https://codecov.io/gh/nsnam/ns-3-dev-git/branch/master/graph/badge.svg)](https://codecov.io/gh/nsnam/ns-3-dev-git/branch/master/)
