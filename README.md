@@ -1,4 +1,5 @@
 # (IEEE 802.11be) Triggered TXOP sharing (TXS) mode 1 Simulator 
+## Table of Contents
 * [Overview]
 * [Cmake Configuration]
 * [Running TXS simulator]
@@ -10,18 +11,17 @@
 Recently, with the emergence of low latency applications such as VR/AR, worst-case delay or reliability is being considered important. However, it is not achievable with the existing MAC features such as a transmission opportunity (TXOP) in IEEE 802.11e amendment, a shared TXOP in IEEE 802.11ac amendment, trigger-based uplink multi-user (UL MU) in IEEE 802.11ax amendment, etc. As one of the alternatives, triggered TXOP sharing was proposed in IEEE 802.11be amendment. Unfortunately, although some simulators such as ns-3, MATLAB, etc provide Wi-Fi simulations, they do not include a portion of IEEE 11be functions, including the triggered TXOP sharing function. Therefore, we implemented a new MAC module that performs the triggered TXOP sharing.
 
 <img width="500" alt="txs_mode_1" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/127d3923-3dba-4654-a71a-e48504bf8fc9">
-
+<em>Triggered TXOP sharing mode 1</em>
 
 <img width="500" alt="txs_mode_2" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/446f80aa-2e38-4730-a02e-02917e6c0a93">
-
-<em>Triggered TXOP sharing mode 1</em>  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <em>Triggered TXOP sharing mode 2</em>
+<em>Triggered TXOP sharing mode 2</em>
 
 <em> Figure 1: The shared STA can send one or more non-TB PPDU to the AP; Figure 2: The shared STA can send a PPDU to the peer STA  or send one or more non-TB PPDU to the AP.</em>
 
-Our simulator provides three simulation scenarios. 
-- Baseline EDCA operation
-- UL MU operation
-- Triggered TXOP sharing 
+**Our simulator provides three simulation scenarios.**
+- **Baseline EDCA operation**: it is that all STA and AP are competing to get TXOP for transmission.
+- **UL MU operation**: it works with the DL MU operation. AP triggers UL MU operation after downlink transmission once. We adopted the round-robin scheme by utilizing the ns-3 scheduler function.
+- **Triggered TXOP sharing**: it is based on the UL MU operation scenario, additionally, AP shares its whole remaining TXOP to a specific STA after transmission once. According to IEEE 802.11be specification, AP can select which STA will be shared and when it will be shared. However, we designated the shared STA to one specific STA and time as whole remaining TXOP in this scenario.
 
 
 ## Cmake Configuration: Please set configuration as follows
@@ -34,9 +34,7 @@ Therefore, we have to disable the codes by the following
 ~/cmake-cache$ cmake -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF ..
 ```
 
-
 ## Running TXS simulator: How to simulate triggered TXOP sharing mode 1
-
 
 
 # The Network Simulator, Version 3
