@@ -18,12 +18,6 @@ Recently, with the emergence of low latency applications such as VR/AR, worst-ca
 
 <em> Figure 1: The shared STA can send one or more non-TB PPDU to the AP; Figure 2: The shared STA can send a PPDU to the peer STA  or send one or more non-TB PPDU to the AP.</em>
 
-**Our simulator provides three simulation scenarios.**
-- **Baseline EDCA operation**: it is that all STA and AP are competing to get TXOP for transmission.
-- **UL MU operation**: it works with the DL MU operation. AP triggers UL MU operation after downlink transmission once. We adopted the round-robin scheme by utilizing the ns-3 scheduler function.
-- **Triggered TXOP sharing**: it is based on the UL MU operation scenario, additionally, AP shares its whole remaining TXOP to a specific STA after transmission once. According to IEEE 802.11be specification, AP can select which STA will be shared and when it will be shared. However, we designated the shared STA to one specific STA and time as whole remaining TXOP in this scenario.
-
-
 ## Cmake Configuration: Please set configuration as follows
 If you face an error in the build, you must check the following configuration.
 
@@ -33,9 +27,25 @@ Therefore, we have to disable the codes by the following
 ```shell
 ~/cmake-cache$ cmake -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF ..
 ```
+And, you must make a folder in the TXS module directory before running our simulator.
+Please type the following
+```shell
+~/TXS_module$ mkdir blabla
+```
 
 ## Running TXS simulator: How to simulate triggered TXOP sharing mode 1
+**Our simulator provides three simulation scenarios.**
+- **Baseline EDCA operation**: it is that all STA and AP are competing to get TXOP for transmission.
+- **UL MU operation**: it works with the DL MU operation. AP triggers UL MU operation after downlink transmission once. We adopted the round-robin scheme by utilizing the ns-3 scheduler function.
+- **Triggered TXOP sharing**: it is based on the UL MU operation scenario, additionally, AP shares its whole remaining TXOP to a specific STA after transmission once. According to IEEE 802.11be specification, AP can select which STA will be shared and when it will be shared. However, we designated the shared STA to one specific STA and time as whole remaining TXOP in this scenario.
 
+Example files for each scenario are scratch/**blabla**, scratch/**blabla2**, and scratch/**blabla3** respectively.
+
+## Notifications
+- You must disable the existing example and test codes in ns-3
+- 
+
+---
 
 # The Network Simulator, Version 3
 
