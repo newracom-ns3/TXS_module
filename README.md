@@ -1,5 +1,7 @@
 # (IEEE 802.11be) Triggered TXOP sharing (TXS) mode 1 Simulator 
 * [Overview]
+Recently, with the emergence of low latency applications such as VR/AR, worst-case delay or reliability is being considered important. However, it is not achievable with the existing MAC features such as a transmission opportunity (TXOP) in IEEE 802.11e amendment, a shared TXOP in IEEE 802.11ac amendment, trigger-based uplink multi-user (UL MU) in IEEE 802.11ax amendment, etc. As one of the alternatives, triggered TXOP sharing was proposed in IEEE 802.11be amendment. Unfortunately, although some simulators such as ns-3, MATLAB, etc provide Wi-Fi simulations, they do not include a portion of IEEE 11be functions, including the triggered TXOP sharing function. Therefore, we implement the triggered TXOP sharing and demonstrate the validity of the implemented module. Ultimately, we verify the performance of the triggered TXOP sharing compared with the legacy MAC features.
+
 * [Cmake Configuration]
 * [Running TXS module]
 * [Notification]
