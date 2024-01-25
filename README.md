@@ -9,8 +9,19 @@
 ## Overview: What is Triggered TXOP sharing?
 Recently, with the emergence of low latency applications such as VR/AR, worst-case delay or reliability is being considered important. However, it is not achievable with the existing MAC features such as a transmission opportunity (TXOP) in IEEE 802.11e amendment, a shared TXOP in IEEE 802.11ac amendment, trigger-based uplink multi-user (UL MU) in IEEE 802.11ax amendment, etc. As one of the alternatives, triggered TXOP sharing was proposed in IEEE 802.11be amendment. Unfortunately, although some simulators such as ns-3, MATLAB, etc provide Wi-Fi simulations, they do not include a portion of IEEE 11be functions, including the triggered TXOP sharing function. Therefore, we implemented a new MAC module that performs the triggered TXOP sharing.
 
-<img width="700" alt="txs_mode_1" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/127d3923-3dba-4654-a71a-e48504bf8fc9">
-<img width="700" alt="txs_mode_2" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/446f80aa-2e38-4730-a02e-02917e6c0a93">
+<img width="500" alt="txs_mode_1" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/127d3923-3dba-4654-a71a-e48504bf8fc9">
+<em>Triggered TXOP sharing mode 1</em>
+<img width="500" alt="txs_mode_2" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/446f80aa-2e38-4730-a02e-02917e6c0a93">
+<em>Triggered TXOP sharing mode 2</em>
+
+<em> Figure 1: The shared STA can send one or more non-TB PPDU to the AP; Figure 2: The shared STA can send a PPDU to the peer STA  or send one or more non-TB PPDU to the AP.</em>
+
+## Cmake Configuration: Please set configure as follows
+Our simulator is not compatible with the existing example codes and the test codes in ns-3.
+Therefore, we have to disable the codes if set to enable by the following
+```shell
+~/cmake-cache$ cmake -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF ..
+```
 
 
 # The Network Simulator, Version 3
