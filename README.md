@@ -12,13 +12,13 @@
 Recently, with the emergence of low latency applications such as VR/AR, worst-case delay or reliability is being considered important. However, it is not achievable with the existing MAC features such as a transmission opportunity (TXOP) in IEEE 802.11e amendment, a shared TXOP in IEEE 802.11ac amendment, trigger-based uplink multi-user (UL MU) in IEEE 802.11ax amendment, etc. As one of the alternatives, triggered TXOP sharing was proposed in IEEE 802.11be amendment. Unfortunately, although some simulators such as ns-3, MATLAB, etc provide Wi-Fi simulations, they do not include a portion of IEEE 11be functions, including the triggered TXOP sharing function. Therefore, we implemented a new MAC module that performs the triggered TXOP sharing.
 
 <p align="center"><img width="600" alt="txs_mode_1" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/127d3923-3dba-4654-a71a-e48504bf8fc9">
-<p align="center"><em>Triggered TXOP sharing mode 1</em>
+<p align="center"><em>(a) Triggered TXOP sharing mode 1</em>
 <p align="center"><img width="600" alt="txs_mode_2" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/446f80aa-2e38-4730-a02e-02917e6c0a93">
-<p align="center"><em>Triggered TXOP sharing mode 2</em>
+<p align="center"><em>(b) Triggered TXOP sharing mode 2</em>
 
-<em> Figure 1: The shared STA can send one or more non-TB PPDU to the AP; Figure 2: The shared STA can send a PPDU to the peer STA  or send one or more non-TB PPDU to the AP.</em>
+<em> Figure 1. (a): The shared STA can send one or more non-TB PPDU to the AP; (b): The shared STA can send a PPDU to the peer STA  or send one or more non-TB PPDU to the AP.</em>
 
-## Cmake Configuration: Please comply configuration rule
+## Cmake Configuration: Please comply following rule
 If you face a build error, you must check the following configuration.
 
 Our simulator is incompatible with the existing example and test codes in ns-3.
@@ -44,11 +44,36 @@ We measured BSS throughput, shared STA throughput, and shared STA transmission l
 
 <p align="center"><img width="379" alt="image" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/93948d9a-e633-4721-8a59-95b5b36be511">
 
-The main parameters of the simulation are described in the above table 1. The parameters are based on guide document [Simulation Scenarios](https://mentor.ieee.org/802.11/dcn/14/11-14-0980-16-00ax-simulation-scenarios.docx).
+The main parameters of the simulation are described in the above Table 1. 
 
-All STA associates with AP and transmits the QoS data to AP only. We consider two different application layer traffic rates for AP. In practical conditions, AP generally has more data to transmit than STA. On the other hand, STAs that utilize UL MU or Triggered TXOP sharing operations are compensated by applying MU EDCA parameters. When the MU EDCA parameters multiplier becomes bigger, the compensation effect is stronger and the STA loses its opportunity relatively to get its own TXOP.
+The parameters are based on guide document [Simulation Scenarios](https://mentor.ieee.org/802.11/dcn/14/11-14-0980-16-00ax-simulation-scenarios.docx).
 
+All STA associates with AP and transmits the QoS data to AP only. 
 
+In practical conditions, AP generally has more data to transmit than STA. 
+
+On the other hand, STAs that utilize UL MU or Triggered TXOP sharing operations are compensated by applying MU EDCA parameters. 
+
+When the MU EDCA parameters multiplier becomes bigger, the compensation effect is stronger and the STA loses its opportunity relatively to get its own TXOP.
+
+In considered schenarios, the number of shared STAs is only one.
+
+<p align="center"><img width="450" alt="image" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/9c75b3fa-20c7-4afb-942c-1586ece1595f">
+  <p align="center"><em> Figure 2. Throughput results for three scenarios: baseline EDCA operation, UL MU, and UL MU+Triggered TXOP sharing</em>
+<p align="center"><img width="450" alt="image" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/2c005dbb-e054-405c-a99a-51a7382ce681">
+  <p align="center"><em> Figure 3. Transmission Latency of shared STA for three scenarios: baseline EDCA operation, UL MU, and UL MU+Triggered TXOP sharing.</em>
+
+Figure 1 and Figure 2 show the throughput and average latency of the shared TXS STA. 
+
+Theses show the outperforms in the throughput and latency performance. 
+
+Triggered TXOP sharing gets advantages when the compensation effect from MU EDCA parameters increases. 
+
+Increasing the influence of MU EDCA parameters means that AP wins more chance to channel access than STAs.
+
+Then, the transmission of STAs becomes more dependent on AP.
+
+It leads to the performance improvement of the shared STA throughput and average latency in the considered scenarios.
 
 ## Notifications
 - If you face a build error, we recommend checking whether the existing example and test codes in ns-3 are enabled.
