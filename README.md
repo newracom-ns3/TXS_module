@@ -11,11 +11,10 @@
 ## Overview: What is Triggered TXOP sharing
 Recently, with the emergence of low latency applications such as VR/AR, worst-case delay or reliability is being considered important. However, it is not achievable with the existing MAC features such as a transmission opportunity (TXOP) in IEEE 802.11e amendment, a shared TXOP in IEEE 802.11ac amendment, trigger-based uplink multi-user (UL MU) in IEEE 802.11ax amendment, etc. As one of the alternatives, triggered TXOP sharing was proposed in IEEE 802.11be amendment. Unfortunately, although some simulators such as ns-3, MATLAB, etc provide Wi-Fi simulations, they do not include a portion of IEEE 11be functions, including the triggered TXOP sharing function. Therefore, we implemented a new MAC module that performs the triggered TXOP sharing.
 
-<img width="500" alt="txs_mode_1" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/127d3923-3dba-4654-a71a-e48504bf8fc9">
-<em>Triggered TXOP sharing mode 1</em>
-
-<img width="500" alt="txs_mode_2" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/446f80aa-2e38-4730-a02e-02917e6c0a93">
-<em>Triggered TXOP sharing mode 2</em>
+<p align="center"><img width="600" alt="txs_mode_1" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/127d3923-3dba-4654-a71a-e48504bf8fc9">
+<p align="center"><em>Triggered TXOP sharing mode 1</em>
+<p align="center"><img width="600" alt="txs_mode_2" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/446f80aa-2e38-4730-a02e-02917e6c0a93">
+<p align="center"><em>Triggered TXOP sharing mode 2</em>
 
 <em> Figure 1: The shared STA can send one or more non-TB PPDU to the AP; Figure 2: The shared STA can send a PPDU to the peer STA  or send one or more non-TB PPDU to the AP.</em>
 
@@ -28,11 +27,7 @@ Therefore, we have to disable the codes by the following
 ```shell
 ~/cmake-cache$ cmake -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF ..
 ```
-And, you must make a folder in the TXS module directory before running our simulator.
-Please type the following
-```shell
-~/TXS_module$ mkdir blabla
-```
+The TXS simulator is compatible with the Clang kit, but we recommend using GCC kit.
 
 ## Running TXS simulator: How to simulate triggered TXOP sharing mode 1
 **Our simulator provides three simulation scenarios.**
@@ -45,6 +40,14 @@ Example files for each scenario are scratch/**blabla**, scratch/**blabla2**, and
 > **NOTE**: The proposed simulator provides only the triggered TXOP sharing mode 1.
 
 ## Simulator Validity
+We measured BSS throughput, shared STA throughput, and shared STA transmission latency according to the three scenarios in [Evaluation Methodology](https://mentor.ieee.org/802.11/dcn/14/11-14-0571-12-00ax-evaluation-methodology.docx).
+
+<p align="center"><img width="379" alt="image" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/93948d9a-e633-4721-8a59-95b5b36be511">
+
+The main parameters of the simulation are described in the above table 1. The parameters are based on guide document [Simulation Scenarios](https://mentor.ieee.org/802.11/dcn/14/11-14-0980-16-00ax-simulation-scenarios.docx).
+
+All STA associates with AP and transmits the QoS data to AP only. We consider two different application layer traffic rates for AP. In practical conditions, AP generally has more data to transmit than STA. On the other hand, STAs that utilize UL MU or Triggered TXOP sharing operations are compensated by applying MU EDCA parameters. When the MU EDCA parameters multiplier becomes bigger, the compensation effect is stronger and the STA loses its opportunity relatively to get its own TXOP.
+
 
 
 ## Notifications
