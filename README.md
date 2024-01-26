@@ -3,6 +3,7 @@
 * [Overview]
 * [Cmake Configuration]
 * [Running TXS simulator]
+* [Simulator Validity]
 * [Notification]
 
 > **NOTE**: The proposed simulator is a demo version. The complete version (including Triggered TXOP sharing mode 2) will be coming soon.
@@ -18,7 +19,7 @@ Recently, with the emergence of low latency applications such as VR/AR, worst-ca
 
 <em> Figure 1: The shared STA can send one or more non-TB PPDU to the AP; Figure 2: The shared STA can send a PPDU to the peer STA  or send one or more non-TB PPDU to the AP.</em>
 
-## Cmake Configuration: Please set configuration as follows
+## Cmake Configuration: Please comply configuration rule
 If you face a build error, you must check the following configuration.
 
 Our simulator is incompatible with the existing example and test codes in ns-3.
@@ -43,10 +44,13 @@ Example files for each scenario are scratch/**blabla**, scratch/**blabla2**, and
 
 > **NOTE**: The proposed simulator provides only the triggered TXOP sharing mode 1.
 
+## Simulator Validity
+
+
 ## Notifications
 - If you face a build error, we recommend checking whether the existing example and test codes in ns-3 are enabled.
 - If you face an error when running our example code, we recommend checking whether **BlaBla** folder is in the TXS module directory.
-- If you contact us, please mail to cm.lee@newratek.com or sm.lee@newratek.
+- If you contact us, please mail to cm.lee@newratek.com or sm.lee@newratek.com.
 
 ---
 
