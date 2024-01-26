@@ -114,13 +114,13 @@ WifiPhy::GetTypeId()
                           UintegerValue(0),
                           MakeUintegerAccessor(&WifiPhy::GetChannelNumber),
                           MakeUintegerChecker<uint8_t>(0, 233))
-            .AddAttribute(
-                "ChannelWidth",
-                "The width in MHz of the current operating channel (5, 10, 20, 22, 40, 80 or 160).",
-                TypeId::ATTR_GET,
-                UintegerValue(0),
-                MakeUintegerAccessor(&WifiPhy::GetChannelWidth),
-                MakeUintegerChecker<uint16_t>(5, 160))
+            .AddAttribute("ChannelWidth",
+                          "The width in MHz of the current operating channel (5, 10, 20, 22, "
+                          "40, 80 or 160).",
+                          TypeId::ATTR_GET,
+                          UintegerValue(0),
+                          MakeUintegerAccessor(&WifiPhy::GetChannelWidth),
+                          MakeUintegerChecker<uint16_t>(5, 160))
             .AddAttribute(
                 "Primary20MHzIndex",
                 "The index of the primary 20 MHz channel within the current operating channel "
@@ -191,7 +191,8 @@ WifiPhy::GetTypeId()
                 "\"the difference in decibels (dB) between"
                 " the noise output of the actual receiver to the noise output of an "
                 " ideal receiver with the same overall gain and bandwidth when the receivers "
-                " are connected to sources at the standard noise temperature T0 (usually 290 K)\".",
+                " are connected to sources at the standard noise temperature T0 (usually 290 "
+                "K)\".",
                 DoubleValue(7),
                 MakeDoubleAccessor(&WifiPhy::SetRxNoiseFigure),
                 MakeDoubleChecker<double>())
@@ -337,7 +338,18 @@ WifiPhy::GetTypeId()
                             "Trace source simulating the capability of a wifi device "
                             "in monitor mode to sniff all frames being transmitted",
                             MakeTraceSourceAccessor(&WifiPhy::m_phyMonitorSniffTxTrace),
-                            "ns3::WifiPhy::MonitorSnifferTxTracedCallback");
+                            "ns3::WifiPhy::MonitorSnifferTxTracedCallback")
+            // Newracom
+            .AddTraceSource("PhyTxEndQoS",
+                            "Trace source indicating a QoS data packet "
+                            "has been completely transmitted over the channel.",
+                            MakeTraceSourceAccessor(&WifiPhy::m_phyTxEndTraceQoS),
+                            "ns3::Packet::TracedCallback")
+            .AddTraceSource("AvgDelayTime",
+                            "Trace source indicating Average of delay time that "
+                            "(transmit time at phy - enqueue time)",
+                            MakeTraceSourceAccessor(&WifiPhy::m_avgTransmissionDelay),
+                            "ns3::Packet::TracedValue");
     return tid;
 }
 
@@ -346,6 +358,7 @@ WifiPhy::WifiPhy()
       m_rxMpduReferenceNumber(0xffffffff),
       m_endPhyRxEvent(),
       m_endTxEvent(),
+      m_endTxEventQoS(),
       m_currentEvent(nullptr),
       m_previouslyRxPpduUid(UINT64_MAX),
       m_standard(WIFI_STANDARD_UNSPECIFIED),
@@ -366,6 +379,7 @@ WifiPhy::WifiPhy()
     NS_LOG_FUNCTION(this);
     m_random = CreateObject<UniformRandomVariable>();
     m_state = CreateObject<WifiPhyStateHelper>();
+    m_avgTransmissionDelay = Seconds(0);
 }
 
 WifiPhy::~WifiPhy()
@@ -403,6 +417,7 @@ WifiPhy::DoDispose()
 {
     NS_LOG_FUNCTION(this);
     m_endTxEvent.Cancel();
+    m_endTxEventQoS.Cancel();
     m_endPhyRxEvent.Cancel();
     for (auto& phyEntity : m_phyEntities)
     {
@@ -1389,6 +1404,7 @@ WifiPhy::SetOffMode()
     m_channelAccessRequested = false;
     m_endPhyRxEvent.Cancel();
     m_endTxEvent.Cancel();
+    m_endTxEventQoS.Cancel();
     for (auto& phyEntity : m_phyEntities)
     {
         phyEntity.second->CancelAllEvents();
@@ -1576,6 +1592,22 @@ WifiPhy::NotifyTxEnd(WifiConstPsduMap psdus)
     }
 }
 
+// Newracom
+void
+WifiPhy::NotifyTxEndQoS(WifiConstPsduMap psdus)
+{
+    if (!m_phyTxEndTraceQoS.IsEmpty())
+    {
+        for (const auto& psdu : psdus)
+        {
+            for (auto& mpdu : *PeekPointer(psdu.second))
+            {
+                m_phyTxEndTraceQoS(mpdu->GetProtocolDataUnit());
+            }
+        }
+    }
+}
+
 void
 WifiPhy::NotifyTxDrop(Ptr<const WifiPsdu> psdu)
 {
@@ -1743,6 +1775,7 @@ WifiPhy::Send(WifiConstPsduMap psdus, const WifiTxVector& txVector)
      */
     NS_ASSERT(!m_state->IsStateTx() && !m_state->IsStateSwitching());
     NS_ASSERT(m_endTxEvent.IsExpired());
+    NS_ASSERT(m_endTxEventQoS.IsExpired());
 
     if (!txVector.IsValid())
     {
@@ -1838,31 +1871,30 @@ WifiPhy::Send(WifiConstPsduMap psdus, const WifiTxVector& txVector)
         ppdu->SetTruncatedTx();
     }
 
-    // Time cumulatedDelay;
-    // Time avgDelay;
-    // uint32_t countAggregation = 0;
-    // if (psdus.begin()->second->GetHeader(0).IsQosData() &&
-    //     !(psdus.begin()->second->GetHeader(0).GetAddr1().IsBroadcast()))
-    // {
-    //     m_endTxEvent =
-    //         Simulator::Schedule(txDuration, &WifiPhy::NotifyTxEnd, this, psdus); // TODO: fix for
-    //         MU
-    //     WifiConstPsduMap::iterator itPsdu = psdus.begin();
+    // Newracom
+    Time cumulatedDelay = Seconds(0);
+    uint32_t countAggregation = 0;
+    if (psdus.begin()->second->GetHeader(0).IsQosData() &&
+        !(psdus.begin()->second->GetHeader(0).GetAddr1().IsBroadcast()))
+    {
+        m_endTxEventQoS = Simulator::Schedule(txDuration, &WifiPhy::NotifyTxEndQoS, this, psdus);
 
-    //     while (itPsdu != psdus.end())
-    //     {
-    //         std::vector<Ptr<WifiMpdu>>::const_iterator itMpdu = itPsdu->second->begin();
+        WifiConstPsduMap::iterator itPsdu = psdus.begin();
 
-    //         while ((*itMpdu) != *(itPsdu->second->end()))
-    //         {
-    //             cumulatedDelay += Simulator::Now() - (*itMpdu)->GetTimestamp();
-    //             countAggregation += 1;
-    //             ++itMpdu;
-    //         }
-    //         ++itPsdu;
-    //     }
-    //     avgDelay = cumulatedDelay / countAggregation;
-    // }
+        while (itPsdu != psdus.end())
+        {
+            std::vector<Ptr<WifiMpdu>>::const_iterator itMpdu = itPsdu->second->begin();
+
+            while ((*itMpdu) != *(itPsdu->second->end()))
+            {
+                cumulatedDelay += Simulator::Now() - (*itMpdu)->GetTimestamp();
+                countAggregation += 1;
+                ++itMpdu;
+            }
+            ++itPsdu;
+        }
+        m_avgTransmissionDelay = cumulatedDelay / countAggregation;
+    }
 
     StartTx(ppdu);
     ppdu->ResetTxVector();
