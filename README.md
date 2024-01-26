@@ -57,7 +57,7 @@ In the considered schenarios, the number of shared STAs is only one.
 
 Figure 1 and Figure 2 show the throughput and average latency of the shared TXS STA. 
 
-Theses show the outperforms in the throughput and latency performance. Triggered TXOP sharing gets advantages when the compensation effect from MU EDCA parameters increases. Increasing the influence of MU EDCA parameters means that AP wins more chance to channel access than STAs. Then, the transmission of STAs becomes more dependent on AP. It leads to the performance improvement of the shared STA throughput and average latency in the considered scenarios.
+These show the outperforms aspects of the throughput and average latency in UL MU+Triggered TXOP sharing. Triggered TXOP sharing gets advantages when the compensation effect from MU EDCA parameters increases. Increasing the influence of MU EDCA parameters means that AP wins more chance to channel access than STAs. Then, the transmission of STAs becomes more dependent on AP. It leads to the performance improvement of the shared STA throughput and average latency in the considered scenarios.
 
 ## Notifications
 - If you face a build error, we recommend checking whether the existing example and test codes in ns-3 are enabled.
