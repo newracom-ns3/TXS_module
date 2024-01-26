@@ -31,8 +31,6 @@
 #include "ns3/sta-wifi-mac.h"
 #include "ns3/wifi-tx-vector.h"
 
-// #include "ns3/multi-user-scheduler.h"
-
 #undef NS_LOG_APPEND_CONTEXT
 #define NS_LOG_APPEND_CONTEXT                                                                      \
     std::clog << "[Time=" << Simulator::Now().GetMicroSeconds() << "]"                             \
@@ -77,7 +75,6 @@ TxsFrameExchangeManager::StartFrameExchange(Ptr<QosTxop> edca,
                                             Time availableTime,
                                             bool initialFrame)
 {
-    // NS_LOG_INFO(this << *mpdu << rxSignalInfo << txVector << inAmpdu);
     NS_LOG_INFO("AvailableTime: " << availableTime.GetMicroSeconds());
     if (this->m_apMac)
     {
@@ -109,6 +106,8 @@ TxsFrameExchangeManager::StartFrameExchange(Ptr<QosTxop> edca,
             {
                 txsMuScheduler->NotifyAccessGranted(m_linkId);
             }
+
+            // Share TXOP to the specific STA
 
             if (Mac48Address ulSta("00:00:00:00:00:02");
                 txsMuScheduler->GetFirstAssocStaList() == ulSta)
@@ -651,7 +650,7 @@ TxsFrameExchangeManager::SendCtsAfterMuRtsTxs(const WifiMacHeader& muRtsHdr,
     // NS_LOG_INFO("Next TX time: " << nextTxInterval.GetMicroSeconds());
 
     Simulator::Schedule(nextTxInterval,
-                        &TxsFrameExchangeManager::StartTransmission,
+                        &TxsFrameExchangeManager::StartTransmissionInTxs,
                         this,
                         m_edca,
                         allowedWidth);
@@ -734,7 +733,7 @@ TxsFrameExchangeManager::GetCtsTxVectorAfterMuRts(const TxsCtrlTriggerHeader& tr
 }
 
 bool
-TxsFrameExchangeManager::StartTransmission(Ptr<QosTxop> edca, uint16_t allowedWidth)
+TxsFrameExchangeManager::StartTransmissionInTxs(Ptr<QosTxop> edca, uint16_t allowedWidth)
 {
     if (m_navEnd > Simulator::Now())
     {

@@ -6,11 +6,7 @@
 !subdir/
 !scratch-simulator.cc
 !CMakeLists.txt
-!wifi-he-network_homogeneous_double_links.cc
-!wifi-he-network_homogeneous_single_link.cc
-!wifi-he-network_homogeneous_two_aps.cc
-!wifi-he-network_homogeneous.cc
-!nrc-mu-rts-txs-example.cc
-!nrc-mu-rts-txs-example_cm.cc
-!nrc-uora-example.cc
-!nrc-basic-example.cc
+!triggered-txs-mode-1-example.cc
+!mu-ul-example.cc
+!basic-example.cc
+

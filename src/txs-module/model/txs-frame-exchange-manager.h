@@ -85,7 +85,7 @@ class TxsFrameExchangeManager : public EhtFrameExchangeManager
                               double muRtsSnr);
     bool IsInValid(Ptr<const WifiMpdu> mpdu) const;
     void SetImaginaryPsdu();
-    bool StartTransmission(Ptr<QosTxop> edca, uint16_t allowedWidth);
+    bool StartTransmissionInTxs(Ptr<QosTxop> edca, uint16_t allowedWidth);
     void SetSharedStaAddress(Mac48Address macAddress);
     Mac48Address GetSharedStaAddress() const;
     Time GetBlockAckDuration(const RecipientBlockAckAgreement& agreement,
@@ -104,7 +104,7 @@ class TxsFrameExchangeManager : public EhtFrameExchangeManager
                       const WifiTxVector& txVector,
                       const Mac48Address& macAddress,
                       Time duration);
-    void PostProcessFrame(Ptr<const WifiPsdu> psdu, const WifiTxVector& txVector);
+    void PostProcessFrame(Ptr<const WifiPsdu> psdu, const WifiTxVector& txVector) override;
     void TransmissionFailed() override;
     void NotifyChannelReleased(Ptr<Txop> txop) override;
 
