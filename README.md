@@ -4,6 +4,7 @@
 * [Cmake Configuration]
 * [Running TXS simulator]
 * [Simulator Validity]
+* [Result]
 * [Notification]
 
 > **NOTE**: The proposed simulator is a demo version. The complete version (including Triggered TXOP sharing mode 2) will be coming soon.
@@ -40,15 +41,19 @@ Example files for each scenario are scratch/**blabla**, scratch/**blabla2**, and
 > **NOTE**: The proposed simulator provides only the triggered TXOP sharing mode 1.
 
 ## Simulator Validity
+
+### Getting simulation results
+
+### Analysing simulation results
 We measured BSS throughput, shared STA throughput, and shared STA transmission latency according to the three scenarios in [Evaluation Methodology](https://mentor.ieee.org/802.11/dcn/14/11-14-0571-12-00ax-evaluation-methodology.docx).
 
 <p align="center"><img width="379" alt="image" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/93948d9a-e633-4721-8a59-95b5b36be511">
 
-The main parameters of the simulation are described in the above Table 1. The parameters are based on guide document [Simulation Scenarios](https://mentor.ieee.org/802.11/dcn/14/11-14-0980-16-00ax-simulation-scenarios.docx).
+The main parameters of the simulation are described in the above Table 1. The parameters are based on the guide document [Simulation Scenarios](https://mentor.ieee.org/802.11/dcn/14/11-14-0980-16-00ax-simulation-scenarios.docx).
 
 All STA associates with AP and transmits the QoS data to AP only. In practical conditions, AP generally has more data to transmit than STA. On the other hand, STAs that utilize UL MU or Triggered TXOP sharing operations are compensated by applying MU EDCA parameters. When the MU EDCA parameters multiplier becomes bigger, the compensation effect is stronger and the STA loses its opportunity relatively to get its own TXOP.
 
-In the considered schenarios, the number of shared STAs is only one.
+In the considered scenarios, the number of shared STAs is only one.
 
 <p align="center"><img width="450" alt="image" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/9c75b3fa-20c7-4afb-942c-1586ece1595f">
   <p align="center"><em> Figure 2. Throughput results for three scenarios: baseline EDCA operation, UL MU, and UL MU+Triggered TXOP sharing</em>
