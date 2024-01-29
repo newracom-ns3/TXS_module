@@ -1,15 +1,16 @@
 # (IEEE 802.11be) Triggered TXOP sharing (TXS) mode 1 Simulator (Demo version)
 ## Table of Contents
-* [Overview]
-* [Implementation Method]
-* [Cmake Configuration]
-* [Running TXS simulator]
-* [Simulator Validity]
-* [Notification]
+* [Overview](#overview)
+* [Implementation Method](#implementation-method)
+* [Cmake Configuration](#cmake-configuration)
+* [Running TXS simulator](#running-txs-simulator)
+* [Simulator Validity](#simulator-validity)
+* [Notifications](#notifications)
 
 > **NOTE**: The proposed simulator is a demo version. The complete version (including Triggered TXOP sharing mode 2) will be coming soon.
 
-## Overview: What is Triggered TXOP sharing
+<a name="overview"></a>
+## Overview: What is triggered TXOP sharing
 Recently, with the emergence of low latency applications such as VR/AR, worst-case delay or reliability is being considered important. However, it is not achievable with the existing MAC features such as a transmission opportunity (TXOP) in IEEE 802.11e amendment, a shared TXOP in IEEE 802.11ac amendment, trigger-based uplink multi-user (UL MU) in IEEE 802.11ax amendment, etc. As one of the alternatives, triggered TXOP sharing was proposed in IEEE 802.11be amendment. Unfortunately, although some simulators such as ns-3, MATLAB, etc provide Wi-Fi simulations, they do not include a portion of IEEE 11be functions, including the triggered TXOP sharing function. Therefore, we implemented a new MAC module that performs the triggered TXOP sharing.
 
 <p align="center"><img width="600" alt="txs_mode_1" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/127d3923-3dba-4654-a71a-e48504bf8fc9">
@@ -19,6 +20,7 @@ Recently, with the emergence of low latency applications such as VR/AR, worst-ca
 
 <em> Figure 1. (a): The shared STA can send one or more non-TB PPDU to the AP; (b): The shared STA can send a PPDU to the peer STA  or send one or more non-TB PPDU to the AP.</em>
 
+<a name="implementation-method"></a>
 ## Implementation Method
 
 <p align="center"><img width="600" alt="txs_mode_1" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/83b40355-ef1f-453f-8460-ff95d93a30b8">
@@ -30,6 +32,7 @@ To achieve this, we added a new FrameExchangeManager (FEM) that includes the TXS
 
 > **NOTE**: Now, the TXS module is not fully compatible with the basis of ns-3 (3.40). We will soon provide the complete version with full compatibility. It means that you will be able to run the triggered TXOP sharing mode 1 in your customized ns-3 simulator by adding our TXS module to your "src" directory. Therefore, We recommend running the TXS module only in our code.
 
+<a name="cmake-configuration"></a>
 ## Cmake Configuration: Please comply following rule
 If you face a build error, you must check the following configuration.
 
@@ -41,6 +44,7 @@ Therefore, we have to disable the codes by the following
 ```
 The TXS simulator is compatible with the Clang kit, but we recommend using GCC kit.
 
+<a name="running-txs-simulator"></a>
 ## Running TXS simulator: How to simulate triggered TXOP sharing mode 1
 Our simulator provides three simulation scenarios.
 - **Baseline EDCA operation**: it is that all STA and AP are competing to get TXOP for transmission.
@@ -51,6 +55,7 @@ You can run each scenario in scratch/**blabla**, scratch/**blabla2**, and scratc
 
 > **NOTE**: The proposed simulator provides only the triggered TXOP sharing mode 1.
 
+<a name="simulator-validity"></a>
 ## Simulator Validity
 
 ### Getting simulation results
@@ -80,6 +85,7 @@ Figure 4 and Figure 5 show the throughput and average latency of the shared TXS 
 
 These show the outperforms aspects of the throughput and average latency in UL MU+Triggered TXOP sharing. Triggered TXOP sharing gets advantages when the compensation effect from MU EDCA parameters increases. Increasing the influence of MU EDCA parameters means that AP wins more chance to channel access than STAs. Then, the transmission of STAs becomes more dependent on AP. It leads to the performance improvement of the shared STA throughput and average latency in the considered scenarios.
 
+<a name="notifications"></a>
 ## Notifications
 - If you face a build error, we recommend checking whether the existing example and test codes in ns-3 are enabled.
 - The provided simulator is a demo version. So, the TXS module is not compatible with your customized ns-3 codes.
