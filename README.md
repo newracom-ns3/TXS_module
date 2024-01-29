@@ -29,7 +29,7 @@ In development, we tried to ensure that the module could be easily integrated wi
 
 To achieve this, we added a new FrameExchangeManager (FEM) that includes the TXS function (which is called TxsFEM), as shown in  Figure 2. The TxsFEM inherits from the legacy FEMs (EhtFEM, HeFEM, VhtFEM, etc.).
 
-> **NOTE**: Now, our demo module may not be completely compatible with a later version of ns-3 (3.40) yet. We will soon provide the complete version with full compatibility. It means that you will be able to run the triggered TXOP sharing mode 1 in your customized ns-3 simulator by adding our TXS module to your "src" directory.
+> **NOTE**: Now, our demo module is not fully compatible with the basis of ns-3 (3.40) yet. We will soon provide the complete version with full compatibility. It means that you will be able to run the triggered TXOP sharing mode 1 in your customized ns-3 simulator by adding our TXS module to your "src" directory.
 
 ## Cmake Configuration: Please comply following rule
 If you face a build error, you must check the following configuration.
@@ -48,13 +48,14 @@ Our simulator provides three simulation scenarios.
 - **UL MU operation**: it works with the DL MU operation. AP triggers UL MU operation after downlink transmission once. We adopted the round-robin scheme by utilizing the ns-3 scheduler function.
 - **Triggered TXOP sharing**: it is based on the UL MU operation scenario, additionally, AP shares its whole remaining TXOP to a specific STA after transmission once. According to IEEE 802.11be specification, AP can select which STA will be shared and when it will be shared. However, we designated the shared STA to one specific STA and time as whole remaining TXOP in this scenario.
 
-Example files for each scenario are scratch/**blabla**, scratch/**blabla2**, and scratch/**blabla3** respectively.
+You can run each scenario in scratch/**blabla**, scratch/**blabla2**, and scratch/**blabla3** respectively.
 
 > **NOTE**: The proposed simulator provides only the triggered TXOP sharing mode 1.
 
 ## Simulator Validity
 
 ### Getting simulation results
+cm.lee, please add this section.
 
 ### Analysing simulation results
 
