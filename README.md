@@ -20,11 +20,19 @@ Recently, with the emergence of low latency applications such as VR/AR, worst-ca
 
 <em> Figure 1. (a): The shared STA can send one or more non-TB PPDU to the AP; (b): The shared STA can send a PPDU to the peer STA  or send one or more non-TB PPDU to the AP.</em>
 
+Figure 1-(a) shows an example of triggered TXOP sharing mode 1 in which the shared STA can send one or more non-trigger-based PPDU(non-TB PPDU) to the AP.
+
+Figure 2-(b) shows an example of triggered TXOP sharing mode 2 in which the shared STA can send one or more non-TB PPDU to a peer-to-peer STA as well as the AP.
+
+The two modes can release the latency of a shared STA since it has a more frequent transmission opportunity by the AP.
+
+We verify the performance in section of [Simulator Validity](#simulator-validity)
+
 <a name="implementation-method"></a>
 ## Implementation Method
 
 <p align="center"><img width="600" alt="txs_mode_1" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/83b40355-ef1f-453f-8460-ff95d93a30b8">
-<p align="center"><em>(a) Figure 2. MAC implementation architecture for triggered TXOP sharing mode 1.</em>
+<p align="center"><em> Figure 2. MAC implementation architecture for triggered TXOP sharing mode 1.</em>
 
 In development, we tried to ensure that the module could be easily integrated with a later version of ns-3 (3.40) for improved compatibility.
 
@@ -74,7 +82,7 @@ The main parameters of the simulation are described in the above Table 1. The pa
 
 All STA associates with AP and transmits the QoS data to AP only. In practical conditions, AP generally has more data to transmit than STA. On the other hand, STAs that utilize UL MU or Triggered TXOP sharing operations are compensated by applying MU EDCA parameters. When the MU EDCA parameters multiplier becomes bigger, the compensation effect is stronger and the STA loses its opportunity relatively to get its own TXOP.
 
-In the considered scenarios, the number of shared STAs is only one.
+Here, we assumed that there is only one shared STA.
 
 <p align="center"><img width="450" alt="image" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/9c75b3fa-20c7-4afb-942c-1586ece1595f">
   <p align="center"><em> Figure 4. Throughput results for three scenarios: baseline EDCA operation, UL MU, and UL MU+Triggered TXOP sharing</em>
