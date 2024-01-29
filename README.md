@@ -29,7 +29,7 @@ In development, we tried to ensure that the module could be easily integrated wi
 
 To achieve this, we added a new FrameExchangeManager (FEM) that includes the TXS function (which is called TxsFEM), as shown in  Figure 2. The TxsFEM inherits from the legacy FEMs (EhtFEM, HeFEM, VhtFEM, etc.).
 
-> **NOTE**: Now, our demo module is not fully compatible with the basis of ns-3 (3.40) yet. We will soon provide the complete version with full compatibility. It means that you will be able to run the triggered TXOP sharing mode 1 in your customized ns-3 simulator by adding our TXS module to your "src" directory.
+> **NOTE**: Now, the TXS module is not fully compatible with the basis of ns-3 (3.40). We will soon provide the complete version with full compatibility. It means that you will be able to run the triggered TXOP sharing mode 1 in your customized ns-3 simulator by adding our TXS module to your "src" directory. Therefore, We recommend running the TXS module only in our code.
 
 ## Cmake Configuration: Please comply following rule
 If you face a build error, you must check the following configuration.
@@ -55,7 +55,7 @@ You can run each scenario in scratch/**blabla**, scratch/**blabla2**, and scratc
 ## Simulator Validity
 
 ### Getting simulation results
-cm.lee, please add this section.
+@cm.lee, please add this section.
 
 ### Analysing simulation results
 
@@ -83,7 +83,8 @@ These show the outperforms aspects of the throughput and average latency in UL M
 
 ## Notifications
 - If you face a build error, we recommend checking whether the existing example and test codes in ns-3 are enabled.
-- The provided simulator is a demo version. So, the TXS module is not compatible with your customized ns-3 codes. We recommend running the TXS module in only the code provided in here.
+- The provided simulator is a demo version. So, the TXS module is not compatible with your customized ns-3 codes.
+    - We recommend running the TXS module only in our code.
 - If you contact us, please mail to cm.lee@newratek.com or sm.lee@newratek.com.
 
 ---
