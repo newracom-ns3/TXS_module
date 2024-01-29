@@ -26,7 +26,7 @@ Figure 2-(b) shows an example of triggered TXOP sharing mode 2 in which the shar
 
 The two modes can release the latency of a shared STA since it has a more frequent transmission opportunity by the AP.
 
-We verify the performance in section of [Simulator Validity](#simulator-validity)
+We verify the performance in [Simulator Validity](#simulator-validity) section.
 
 <a name="implementation-method"></a>
 ## Implementation Method
