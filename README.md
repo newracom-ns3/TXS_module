@@ -83,6 +83,7 @@ These show the outperforms aspects of the throughput and average latency in UL M
 
 ## Notifications
 - If you face a build error, we recommend checking whether the existing example and test codes in ns-3 are enabled.
+- The provided simulator is a demo version. So, the TXS module is not compatible with your customized ns-3 codes. We recommend running the TXS module in only the code provided in here.
 - If you contact us, please mail to cm.lee@newratek.com or sm.lee@newratek.com.
 
 ---
