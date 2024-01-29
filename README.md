@@ -5,7 +5,6 @@
 * [Cmake Configuration]
 * [Running TXS simulator]
 * [Simulator Validity]
-* [Result]
 * [Notification]
 
 > **NOTE**: The proposed simulator is a demo version. The complete version (including Triggered TXOP sharing mode 2) will be coming soon.
