@@ -114,7 +114,7 @@ TxsWifiMac::SetupFrameExchangeManager(WifiStandard standard,
 
     if (standard >= WIFI_STANDARD_80211be)
     {
-        // This sniff is edited by @sm.lee from the code of Mathieu Lacage who associated INRIA
+        // This snippet is edited by @sm.lee from the code of Mathieu Lacage who associated INRIA
         if (txsSupported)
         {
             link.feManager = CreateObject<TxsFrameExchangeManager>();
@@ -204,7 +204,7 @@ TxsWifiMacHelper::Create(Ptr<WifiNetDevice> device, WifiStandard standard) const
     mac->SetAddress(Mac48Address::Allocate());
     device->SetMac(mac);
 
-    // This sniff is edited by @sm.lee from the code of Sébastien Deronne
+    // This snippet is edited by @sm.lee from the code of Sébastien Deronne
     Ptr<TxsWifiMac> txsMac = StaticCast<TxsWifiMac>(mac);
     txsMac->FemConfigureStandard(standard, m_txsSupported);
     //

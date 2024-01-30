@@ -880,7 +880,7 @@ class WifiMac : public Object
     Callback<void> m_linkDown; //!< Callback when a link is down
 
   private:
-    // Added by @sm.lee
+    // This snippet is added by Added by @sm.lee
     friend class TxsWifiMac;
 
     /**

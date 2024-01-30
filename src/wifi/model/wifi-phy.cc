@@ -1877,15 +1877,19 @@ WifiPhy::Send(WifiConstPsduMap psdus, const WifiTxVector& txVector)
     if (psdus.begin()->second->GetHeader(0).IsQosData() &&
         !(psdus.begin()->second->GetHeader(0).GetAddr1().IsBroadcast()))
     {
-        m_endTxEventQoS = Simulator::Schedule(txDuration, &WifiPhy::NotifyTxEndQoS, this, psdus);
-
-        WifiConstPsduMap::iterator itPsdu = psdus.begin();
+        bool errorFlag = false;
+        auto itPsdu = psdus.begin();
 
         while (itPsdu != psdus.end())
         {
-            std::vector<Ptr<WifiMpdu>>::const_iterator itMpdu = itPsdu->second->begin();
-
-            while ((*itMpdu) != *(itPsdu->second->end()))
+            auto itMpdu = itPsdu->second->begin();
+            auto itMpduEnd = itPsdu->second->end();
+            if ((*itMpdu) == *(itMpduEnd))
+            {
+                errorFlag = true;
+                break;
+            }
+            while ((*itMpdu) != *(itMpduEnd))
             {
                 cumulatedDelay += Simulator::Now() - (*itMpdu)->GetTimestamp();
                 countAggregation += 1;
@@ -1893,7 +1897,12 @@ WifiPhy::Send(WifiConstPsduMap psdus, const WifiTxVector& txVector)
             }
             ++itPsdu;
         }
-        m_avgTransmissionDelay = cumulatedDelay / countAggregation;
+        if (errorFlag == false)
+        {
+            m_avgTransmissionDelay = cumulatedDelay / countAggregation;
+            m_endTxEventQoS =
+                Simulator::Schedule(txDuration, &WifiPhy::NotifyTxEndQoS, this, psdus);
+        }
     }
 
     StartTx(ppdu);
