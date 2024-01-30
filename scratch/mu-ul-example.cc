@@ -59,7 +59,10 @@
 #include "ns3/ssid.h"
 #include "ns3/stats-module.h"
 #include "ns3/string.h"
+<<<<<<< HEAD
 #include "ns3/txs-wifi-mac-helper.h"
+=======
+>>>>>>> 55d1b4469291f0faad2ffccdc1474b85f82248b3
 #include "ns3/udp-client-server-helper.h"
 #include "ns3/uinteger.h"
 #include "ns3/wifi-acknowledgment.h"
@@ -171,8 +174,12 @@ main(int argc, char* argv[])
     double distance{1.0}; // meters
 
     // Network setting
+<<<<<<< HEAD
     bool isEhtNetwork{false}; // True: EHT network, False: HE network
     bool txsEnabled{false};   // True: TXS supported
+=======
+    bool isEhtNetwork{false}; // True: TXS, False: HE network
+>>>>>>> 55d1b4469291f0faad2ffccdc1474b85f82248b3
     bool udp{true};
     bool enableUlOfdma{true}; // True: mu-ul
     bool enableBsrp{false};
@@ -235,10 +242,14 @@ main(int argc, char* argv[])
             NetDeviceContainer apDevice;
             NetDeviceContainer staDevices;
 
+<<<<<<< HEAD
             txsEnabled = (isEhtNetwork && txsEnabled)
                              ? txsEnabled
                              : false; // TXS supported is enabled in EHT network
             TxsWifiMacHelper mac(txsEnabled);
+=======
+            WifiMacHelper mac;
+>>>>>>> 55d1b4469291f0faad2ffccdc1474b85f82248b3
             WifiHelper wifi;
             std::string channelStr("{" + std::to_string(channelIndex) + ", " +
                                    std::to_string(channelWidth) + ", ");

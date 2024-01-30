@@ -2,6 +2,10 @@
 ## Table of Contents
 * [Overview](#overview)
 * [Implementation Method](#implementation-method)
+<<<<<<< HEAD
+=======
+* [Cmake Configuration](#cmake-configuration)
+>>>>>>> 55d1b4469291f0faad2ffccdc1474b85f82248b3
 * [Running TXS simulator](#running-txs-simulator)
 * [Simulator Validity](#simulator-validity)
 * [Notifications](#notifications)
@@ -39,13 +43,33 @@ To achieve this, we added a new FrameExchangeManager (FEM) that includes the TXS
 
 > **NOTE**: Now, the TXS module is not fully compatible with the basis of ns-3 (3.40). We will soon provide the complete version with full compatibility. It means that you will be able to run the triggered TXOP sharing mode 1 in your customized ns-3 simulator by adding our TXS module to your "src" directory. Therefore, We recommend running the TXS module only in our code.
 
+<<<<<<< HEAD
+=======
+<a name="cmake-configuration"></a>
+## Cmake Configuration: Please comply following rule
+If you face a build error, you must check the following configuration.
+
+Our simulator is incompatible with the existing example and test codes in ns-3.
+
+Therefore, we have to disable the codes by the following
+```shell
+~/cmake-cache$ cmake -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF ..
+```
+The TXS simulator is compatible with the Clang kit, but we recommend using GCC kit.
+
+<a name="running-txs-simulator"></a>
+>>>>>>> 55d1b4469291f0faad2ffccdc1474b85f82248b3
 ## Running TXS simulator: How to simulate triggered TXOP sharing mode 1
 Our simulator provides three simulation scenarios.
 - **Baseline EDCA operation**: it is that all STA and AP are competing to get TXOP for transmission.
 - **UL MU operation**: it works with the DL MU operation. AP triggers UL MU operation after downlink transmission once. We adopted the round-robin scheme by utilizing the ns-3 scheduler function.
 - **Triggered TXOP sharing**: it is based on the UL MU operation scenario, additionally, AP shares its whole remaining TXOP to a specific STA after transmission once. According to IEEE 802.11be specification, AP can select which STA will be shared and when it will be shared. However, we designated the shared STA to one specific STA and time as whole remaining TXOP in this scenario.
 
+<<<<<<< HEAD
 You can run each scenario in scratch/basic-example.cc, scratch/mu-ul-example.cc, and scratch/triggered-txs-mode-1-example.cc, respectively.
+=======
+You can run each scenario in scratch/**blabla**, scratch/**blabla2**, and scratch/**blabla3** respectively.
+>>>>>>> 55d1b4469291f0faad2ffccdc1474b85f82248b3
 
 > **NOTE**: The proposed simulator provides only the triggered TXOP sharing mode 1.
 
@@ -81,6 +105,10 @@ These show the outperforms aspects of the throughput and average latency in UL M
 
 <a name="notifications"></a>
 ## Notifications
+<<<<<<< HEAD
+=======
+- If you face a build error, we recommend checking whether the existing example and test codes in ns-3 are enabled.
+>>>>>>> 55d1b4469291f0faad2ffccdc1474b85f82248b3
 - The provided simulator is a demo version. So, the TXS module is not compatible with your customized ns-3 codes.
     - We recommend running the TXS module only in our code.
 - If you contact us, please mail to cm.lee@newratek.com or sm.lee@newratek.com.
