@@ -36,7 +36,6 @@
 #include "ns3/log.h"
 #include "ns3/packet.h"
 #include "ns3/pointer.h"
-#include "ns3/txs-frame-exchange-manager.h"
 #include "ns3/vht-configuration.h"
 
 #include <algorithm>
@@ -826,8 +825,7 @@ WifiMac::SetupFrameExchangeManager(WifiStandard standard)
 
     if (standard >= WIFI_STANDARD_80211be)
     {
-        // feManager = CreateObject<EhtFrameExchangeManager>();
-        feManager = CreateObject<TxsFrameExchangeManager>();
+        feManager = CreateObject<EhtFrameExchangeManager>();
     }
     else if (standard >= WIFI_STANDARD_80211ax)
     {

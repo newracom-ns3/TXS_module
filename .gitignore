@@ -71,6 +71,7 @@ vcpkg/
 # Ignore local cache used by e.g. clangd
 .cache/
 
-# @cm.lee
+# Newracom
 doc.html
-# *.txt
+newracom-data
+TXS-Data/**/*.txt

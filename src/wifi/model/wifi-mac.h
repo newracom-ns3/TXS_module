@@ -880,6 +880,9 @@ class WifiMac : public Object
     Callback<void> m_linkDown; //!< Callback when a link is down
 
   private:
+    // Added by @sm.lee
+    friend class TxsWifiMac;
+
     /**
      * \param dcf the DCF to be configured
      * \param cwmin the minimum contention window for the DCF
@@ -1010,7 +1013,6 @@ class WifiMac : public Object
      * \param timeout the BK block ack inactivity timeout.
      */
     void SetBkBlockAckInactivityTimeout(uint16_t timeout);
-
     /**
      * This Boolean is set \c true iff this WifiMac is to model
      * 802.11e/WMM style Quality of Service. It is exposed through the

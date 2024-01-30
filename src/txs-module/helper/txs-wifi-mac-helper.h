@@ -16,7 +16,8 @@
  * This file incorporates work covered by the following copyright and
  * permission notice:
  *
- * Copyright (c) 2020 Universita' degli Studi di Napoli Federico II
+ * Copyright (c) 2008 INRIA
+ * Copyright (c) 2016
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,44 +44,51 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * Contributed by Stefano Avallone <stavallo@unina.it>
+ * Contributed by Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
+ *                Sébastien Deronne <sebastien.deronne@gmail.com>
  *
- * This code has been based on ns-3 (wifi/model/he/rr-multi-user-scheduler.{cc,h})
+ * This code has been based on ns-3 (wifi/model/wifi-mac.{cc,h})
+ *                                  (wifi/model/wifi-mac-helper.{cc,h})
+ *
  * Author: Seungmin Lee <sm.lee@newratek.com>
  *         Changmin Lee <cm.lee@newratek.com>
  */
 
-#ifndef TXS_MULTI_USER_SCHEDULER_H
-#define TXS_MULTI_USER_SCHEDULER_H
+#ifndef TXS_WIFI_MAC_HELPER_H
+#define TXS_WIFI_MAC_HELPER_H
 
-#include "ns3/rr-multi-user-scheduler.h"
-
-// Add a doxygen group for this module.
-// If you have more than one file, this should be in only one of them.
-/**
- * \defgroup txs-module Description of the txs-module
- */
+#include "ns3/wifi-mac-helper.h"
+#include "ns3/wifi-mac.h"
 
 namespace ns3
 {
 
-class TxsMultiUserScheduler : public RrMultiUserScheduler
+class WifiMac;
+class WifiNetDevice;
+
+class TxsWifiMac : public WifiMac
 {
   public:
-    static TypeId GetTypeId();
-    TxsMultiUserScheduler();
-    ~TxsMultiUserScheduler();
-    Mac48Address& GetFirstAssocStaList();
-    bool CheckLastTxIsDlMu();
-    void NotifyAccessGranted(u_int8_t linkId);
+    TxsWifiMac();
+    ~TxsWifiMac();
+    void SetupFrameExchangeManager(WifiStandard standard,
+                                   WifiMac::LinkEntity& link,
+                                   bool txsSupported);
+    void FemConfigureStandard(WifiStandard standard, bool txsSupported);
+};
 
-  protected:
-    void DoDispose() override;
+class TxsWifiMacHelper : public WifiMacHelper
+{
+  public:
+    TxsWifiMacHelper(bool enable = false);
+    ~TxsWifiMacHelper();
+
+    Ptr<WifiMac> Create(Ptr<WifiNetDevice> device, WifiStandard standard) const override;
 
   private:
-    void AccessReqTimeout();
+    bool m_txsSupported;
 };
 
 } // namespace ns3
 
-#endif /* TXS_MULTI_USER_SCHEDULER_H */
+#endif

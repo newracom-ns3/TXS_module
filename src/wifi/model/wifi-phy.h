@@ -30,6 +30,10 @@
 
 #include <limits>
 
+// @cm.lee
+#include "ns3/trace-source-accessor.h"
+#include "ns3/traced-value.h"
+
 namespace ns3
 {
 
@@ -570,6 +574,15 @@ class WifiPhy : public Object
      * \param psdus the PSDUs being transmitted (only one unless DL MU transmission)
      */
     void NotifyTxEnd(WifiConstPsduMap psdus);
+
+    // Newracom
+    /**
+     * Public method used to fire a PhyTxEndQoS trace.
+     * Implemented for encapsulation purposes.
+     *
+     * \param psdus the PSDUs being transmitted (only one unless DL MU transmission)
+     */
+    void NotifyTxEndQoS(WifiConstPsduMap psdus);
     /**
      * Public method used to fire a PhyTxDrop trace.
      * Implemented for encapsulation purposes.
@@ -1271,6 +1284,8 @@ class WifiPhy : public Object
 
     EventId m_endPhyRxEvent; //!< the end of PHY receive event
     EventId m_endTxEvent;    //!< the end of transmit event
+    // Newracom
+    EventId m_endTxEventQoS; //!< the end of transmit event for QoS data
 
     Ptr<Event> m_currentEvent; //!< Hold the current event
     std::map<std::pair<uint64_t /* UID*/, WifiPreamble>, Ptr<Event>>
@@ -1393,6 +1408,24 @@ class WifiPhy : public Object
      * \see class CallBackTraceSource
      */
     TracedCallback<Ptr<const Packet>> m_phyTxEndTrace;
+
+    // Newracom
+    /**
+     * The trace source fired when a QoS packet ends the transmission process on
+     * the medium.
+     *
+     * \see class CallBackTraceSource
+     */
+    TracedCallback<Ptr<const Packet>> m_phyTxEndTraceQoS;
+
+    // Newracom
+    /**
+     * The trace value of average transmission delay time
+     * (time when transmit packet at PHY - time when packet is enqueued)
+     *
+     * \see class CallBackTraceSource
+     */
+    TracedValue<Time> m_avgTransmissionDelay;
 
     /**
      * The trace source fired when the PHY layer drops a packet as it tries

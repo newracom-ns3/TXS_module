@@ -16,8 +16,7 @@
  * This file incorporates work covered by the following copyright and
  * permission notice:
  *
- *
- * Copyright (c) Copyright (c) 2009 MIRKO BANCHI
+ * Copyright (c) 2009 MIRKO BANCHI
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,7 +43,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * Contributed by MIRKO BANCHI
+ * Contributed by Mirko Banchi <mk.banchi@gmail.com>
  *
  * This code has been based on ns-3 (wifi/model/ctrl-header.{cc,h})
  * Author: Seungmin Lee <sm.lee@newratek.com>
