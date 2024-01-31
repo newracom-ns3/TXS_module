@@ -78,9 +78,9 @@ All STA associates with AP and transmits the QoS data to AP only. In practical c
 
 Here, we assumed that there is only one shared STA.
 
-<p align="center"><img width="450" alt="image" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/2c005dbb-e054-405c-a99a-51a7382ce681">
-  <p align="center"><em> Figure 4. Throughput results for three scenarios: baseline EDCA operation, UL MU, and UL MU+Triggered TXOP sharing</em>
 <p align="center"><img width="450" alt="image" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/9c75b3fa-20c7-4afb-942c-1586ece1595f">
+  <p align="center"><em> Figure 4. Throughput results for three scenarios: baseline EDCA operation, UL MU, and UL MU+Triggered TXOP sharing</em>
+<p align="center"><img width="450" alt="image" src="https://github.com/newracom-ns3/ns-3-newracom/assets/126837751/61f6b3b2-2006-410f-8505-94d2ceec38df">
   <p align="center"><em> Figure 5. Transmission Latency of shared STA for three scenarios: baseline EDCA operation, UL MU, and UL MU+Triggered TXOP sharing.</em>
 
 Figure 4 and Figure 5 show the throughput and average latency of the shared TXS STA. 
