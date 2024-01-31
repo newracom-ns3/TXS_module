@@ -1,15 +1,18 @@
 # (IEEE 802.11be) Triggered TXOP sharing (TXS) mode 1 Simulator (Demo version)
+
 ## Table of Contents
-* [Overview](#overview)
-* [Implementation Method](#implementation-method)
-* [Running TXS simulator](#running-txs-simulator)
-* [Simulator Validity](#simulator-validity)
-* [Notifications](#notifications)
+
+- [Overview](#overview)
+- [Implementation Method](#implementation-method)
+- [Running TXS simulator](#running-txs-simulator)
+- [Notifications](#notifications)
 
 > **NOTE**: The proposed simulator is a demo version. The complete version (including Triggered TXOP sharing mode 2) will be coming soon.
 
 <a name="overview"></a>
+
 ## Overview: What is triggered TXOP sharing
+
 Recently, with the emergence of low latency applications such as VR/AR, worst-case delay or reliability is being considered important. However, it is not achievable with the existing MAC features such as a transmission opportunity (TXOP) in IEEE 802.11e amendment, a shared TXOP in IEEE 802.11ac amendment, trigger-based uplink multi-user (UL MU) in IEEE 802.11ax amendment, etc. As one of the alternatives, triggered TXOP sharing was proposed in IEEE 802.11be amendment. Unfortunately, although some simulators such as ns-3, MATLAB, etc provide Wi-Fi simulations, they do not include a portion of IEEE 11be functions, including the triggered TXOP sharing function. Therefore, we implemented a new MAC module that performs the triggered TXOP sharing.
 
 <p align="center"><img width="600" alt="txs_mode_1" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/127d3923-3dba-4654-a71a-e48504bf8fc9">
@@ -17,7 +20,7 @@ Recently, with the emergence of low latency applications such as VR/AR, worst-ca
 <p align="center"><img width="600" alt="txs_mode_2" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/446f80aa-2e38-4730-a02e-02917e6c0a93">
 <p align="center"><em>(b) Triggered TXOP sharing mode 2</em>
 
-<em> Figure 1. (a): The shared STA can send one or more non-TB PPDU to the AP; (b): The shared STA can send a PPDU to the peer STA  or send one or more non-TB PPDU to the AP.</em>
+<em> Figure 1. (a): The shared STA can send one or more non-TB PPDU to the AP; (b): The shared STA can send a PPDU to the peer STA or send one or more non-TB PPDU to the AP.</em>
 
 Figure 1-(a) shows an example of triggered TXOP sharing mode 1 in which the shared STA can send one or more non-trigger-based PPDU(non-TB PPDU) to the AP.
 
@@ -25,9 +28,8 @@ Figure 2-(b) shows an example of triggered TXOP sharing mode 2 in which the shar
 
 The two modes can release the latency of a shared STA since it has a more frequent transmission opportunity by the AP.
 
-We verify the performance in [Simulator Validity](#simulator-validity) section.
-
 <a name="implementation-method"></a>
+
 ## Implementation Method
 
 <p align="center"><img width="600" alt="txs_mode_1" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/83b40355-ef1f-453f-8460-ff95d93a30b8">
@@ -35,62 +37,38 @@ We verify the performance in [Simulator Validity](#simulator-validity) section.
 
 In development, we tried to ensure that the module could be easily integrated with a later version of ns-3 (3.40) for improved compatibility.
 
-To achieve this, we added a new FrameExchangeManager (FEM) that includes the TXS function (which is called TxsFEM), as shown in  Figure 2. The TxsFEM inherits from the legacy FEMs (EhtFEM, HeFEM, VhtFEM, etc.).
+To achieve this, we added a new FrameExchangeManager (FEM) that includes the TXS function (which is called TxsFEM), as shown in Figure 2. The TxsFEM inherits from the legacy FEMs (EhtFEM, HeFEM, VhtFEM, etc.).
 
 > **NOTE**: Now, the TXS module is not fully compatible with the basis of ns-3 (3.40). We will soon provide the complete version with full compatibility. It means that you will be able to run the triggered TXOP sharing mode 1 in your customized ns-3 simulator by adding our TXS module to your "src" directory. Therefore, We recommend running the TXS module only in our code.
 
 ## Running TXS simulator: How to simulate triggered TXOP sharing mode 1
+
 Our simulator provides three simulation scenarios.
+
 - **Baseline EDCA operation**: it is that all STA and AP are competing to get TXOP for transmission.
 - **UL MU operation**: it works with the DL MU operation. AP triggers UL MU operation after downlink transmission once. We adopted the round-robin scheme by utilizing the ns-3 scheduler function.
 - **Triggered TXOP sharing**: it is based on the UL MU operation scenario, additionally, AP shares its whole remaining TXOP to a specific STA after transmission once. According to IEEE 802.11be specification, AP can select which STA will be shared and when it will be shared. However, we designated the shared STA to one specific STA and time as whole remaining TXOP in this scenario.
 
-Example files for each scenario (example.cc, mu-ul-example.cc, triggered-txs-mode-1-example.cc) are in the directory src/txs-module/examples, 
+Example files for each scenario (example.cc, mu-ul-example.cc, triggered-txs-mode-1-example.cc) are in the directory src/txs-module/examples,
 
 You can run the examples by typing the following
+
 ```shall
 :~/TXS_module$ ./ns3 run <the example file name>
 ```
 
 > **NOTE**: If you use Cmake, must configure the option of Cmake as follows
+
 ```shall
 :~/TXS_module/cmake-cache$ cmake -DNS3_EXAMPLES=ON ..
 ```
 
-<a name="simulator-validity"></a>
-## Simulator Validity
-
-### Getting simulation results
-@cm.lee, please add this section.
-
-### Analysing simulation results
-
-<p align="center"><img width="600" alt="image" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/3404e851-d329-4e1c-884d-b440e9f6aef6">
-<p align="center"><em> Figure 3. Considered network topology and simulation scenarios.</em>
-  
-We measured BSS throughput, shared STA throughput, and shared STA transmission latency according to the three scenarios in [Evaluation Methodology](https://mentor.ieee.org/802.11/dcn/14/11-14-0571-12-00ax-evaluation-methodology.docx). Network topology and simulation scenarios are shown in Figure 3. 
-
-<p align="center"><img width="379" alt="image" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/93948d9a-e633-4721-8a59-95b5b36be511">
-
-The main parameters of the simulation are described in the above Table 1. The parameters are based on the guide document [Simulation Scenarios](https://mentor.ieee.org/802.11/dcn/14/11-14-0980-16-00ax-simulation-scenarios.docx).
-
-All STA associates with AP and transmits the QoS data to AP only. In practical conditions, AP generally has more data to transmit than STA. On the other hand, STAs that utilize UL MU or Triggered TXOP sharing operations are compensated by applying MU EDCA parameters. When the MU EDCA parameters multiplier becomes bigger, the compensation effect is stronger and the STA loses its opportunity relatively to get its own TXOP.
-
-Here, we assumed that there is only one shared STA.
-
-<p align="center"><img width="450" alt="image" src="https://github.com/newracom-ns3/TXS_module/assets/126837751/9c75b3fa-20c7-4afb-942c-1586ece1595f">
-  <p align="center"><em> Figure 4. Throughput results for three scenarios: baseline EDCA operation, UL MU, and UL MU+Triggered TXOP sharing</em>
-<p align="center"><img width="450" alt="image" src="https://github.com/newracom-ns3/ns-3-newracom/assets/126837751/61f6b3b2-2006-410f-8505-94d2ceec38df">
-  <p align="center"><em> Figure 5. Transmission Latency of shared STA for three scenarios: baseline EDCA operation, UL MU, and UL MU+Triggered TXOP sharing.</em>
-
-Figure 4 and Figure 5 show the throughput and average latency of the shared TXS STA. 
-
-These show the outperforms aspects of the throughput and average latency in UL MU+Triggered TXOP sharing. Triggered TXOP sharing gets advantages when the compensation effect from MU EDCA parameters increases. Increasing the influence of MU EDCA parameters means that AP wins more chance to channel access than STAs. Then, the transmission of STAs becomes more dependent on AP. It leads to the performance improvement of the shared STA throughput and average latency in the considered scenarios.
-
 <a name="notifications"></a>
+
 ## Notifications
+
 - The provided simulator is a demo version. So, the TXS module is not compatible with your customized ns-3 codes.
-    - We recommend running the TXS module only in our code.
+  - We recommend running the TXS module only in our code.
 - If you contact us, please mail to cm.lee@newratek.com or sm.lee@newratek.com.
 
 ---
@@ -103,18 +81,18 @@ These show the outperforms aspects of the throughput and average latency in UL M
 
 ## Table of Contents
 
-* [Overview](#overview-an-open-source-project)
-* [Building ns-3](#building-ns-3)
-* [Testing ns-3](#testing-ns-3)
-* [Running ns-3](#running-ns-3)
-* [ns-3 Documentation](#ns-3-documentation)
-* [Working with the Development Version of ns-3](#working-with-the-development-version-of-ns-3)
-* [Contributing to ns-3](#contributing-to-ns-3)
-* [Reporting Issues](#reporting-issues)
-* [ns-3 App Store](#ns-3-app-store)
+- [Overview](#overview-an-open-source-project)
+- [Building ns-3](#building-ns-3)
+- [Testing ns-3](#testing-ns-3)
+- [Running ns-3](#running-ns-3)
+- [ns-3 Documentation](#ns-3-documentation)
+- [Working with the Development Version of ns-3](#working-with-the-development-version-of-ns-3)
+- [Contributing to ns-3](#contributing-to-ns-3)
+- [Reporting Issues](#reporting-issues)
+- [ns-3 App Store](#ns-3-app-store)
 
 > **NOTE**: Much more substantial information about ns-3 can be found at
-<https://www.nsnam.org>
+> <https://www.nsnam.org>
 
 ## Overview: An Open Source Project
 
@@ -256,11 +234,11 @@ the ns-3 website: <https://www.nsnam.org/documentation/>.
 
 This documentation includes:
 
-* a tutorial
-* a reference manual
-* models in the ns-3 model library
-* a wiki for user-contributed tips: <https://www.nsnam.org/wiki/>
-* API documentation generated using doxygen: this is
+- a tutorial
+- a reference manual
+- models in the ns-3 model library
+- a wiki for user-contributed tips: <https://www.nsnam.org/wiki/>
+- API documentation generated using doxygen: this is
   a reference manual, most likely not very well suited
   as introductory text:
   <https://www.nsnam.org/doxygen/index.html>
