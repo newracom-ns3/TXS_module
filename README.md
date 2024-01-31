@@ -45,9 +45,17 @@ Our simulator provides three simulation scenarios.
 - **UL MU operation**: it works with the DL MU operation. AP triggers UL MU operation after downlink transmission once. We adopted the round-robin scheme by utilizing the ns-3 scheduler function.
 - **Triggered TXOP sharing**: it is based on the UL MU operation scenario, additionally, AP shares its whole remaining TXOP to a specific STA after transmission once. According to IEEE 802.11be specification, AP can select which STA will be shared and when it will be shared. However, we designated the shared STA to one specific STA and time as whole remaining TXOP in this scenario.
 
-You can run each scenario in scratch/basic-example.cc, scratch/mu-ul-example.cc, and scratch/triggered-txs-mode-1-example.cc, respectively.
+Example files for each scenario (example.cc, mu-ul-example.cc, triggered-txs-mode-1-example.cc) are in the directory src/txs-module/examples, 
 
-> **NOTE**: The proposed simulator provides only the triggered TXOP sharing mode 1.
+You can run the examples by typing the following
+```shall
+:~/TXS_module$ ./ns3 run <the example file name>
+```
+
+> **NOTE**: If you use Cmake, must configure the option of Cmake as follows
+```shall
+:~/TXS_module/cmake-cache$ cmake -DNS3_EXAMPLES=ON ..
+```
 
 <a name="simulator-validity"></a>
 ## Simulator Validity

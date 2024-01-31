@@ -149,7 +149,7 @@ class WifiTxParameters
      */
     void Print(std::ostream& os) const;
 
-    // @sm.lee
+    // This snippet is added by @sm.lee
     void ClearInfo();
     PsduInfoMap GetInfo() const;
     void SetInfo(const PsduInfoMap& info);
