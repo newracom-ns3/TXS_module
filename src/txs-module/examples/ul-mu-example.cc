@@ -67,7 +67,7 @@
 
 using namespace ns3;
 
-NS_LOG_COMPONENT_DEFINE("mu-ul-example");
+NS_LOG_COMPONENT_DEFINE("ul-mu-example");
 
 void
 SpectrumNetworkInstallation(WifiMacHelper& mac,
@@ -174,7 +174,7 @@ main(int argc, char* argv[])
     bool isEhtNetwork{false}; // True: EHT network, False: HE network
     bool txsEnabled{false};   // True: TXS supported
     bool udp{true};
-    bool enableUlOfdma{true}; // True: mu-ul
+    bool enableUlOfdma{true}; // True: ul-mu
     bool enableBsrp{false};
     std::size_t nStations{4}; // The number of STAs
     std::string dlAckSeqType{"MU-BAR"};
@@ -492,26 +492,26 @@ main(int argc, char* argv[])
             FileHelper fileHelperRx;
             FileHelper fileHelperLatency;
 
-            std::string headlineTx = "Scenario MU-UL: Tx QoS packet bytes";
-            std::string headlineRx = "Scenario MU-UL: Rx packet bytes";
-            std::string headlineLatency = "Scenario MU-UL: Avg latency time";
+            std::string headlineTx = "Scenario UL-MU: Tx QoS packet bytes";
+            std::string headlineRx = "Scenario UL-MU: Rx packet bytes";
+            std::string headlineLatency = "Scenario UL-MU: Avg latency time";
             fileHelperTx.SetHeading(headlineTx);
             fileHelperRx.SetHeading(headlineRx);
             fileHelperLatency.SetHeading(headlineLatency);
 
             // Configure the file to be written, and the formatting of output data.
-            std::string filePathTx = "TXS-Data/MU-UL/randomSeed-" + std::to_string(randomSeed) +
+            std::string filePathTx = "TXS-Data/UL-MU/randomSeed-" + std::to_string(randomSeed) +
                                      "-muEDCAmultiplier-" + std::to_string(muEDCAmultiplier) +
                                      "-macQueueSize-" + macQueueSize + "-apApplicationDataRate-" +
                                      apApplicationDataRate + "-staApplicationDataRate-" +
                                      staApplicationDataRate + "-tx-packet";
-            std::string filePathRx = "TXS-Data/MU-UL/randomSeed-" + std::to_string(randomSeed) +
+            std::string filePathRx = "TXS-Data/UL-MU/randomSeed-" + std::to_string(randomSeed) +
                                      "-muEDCAmultiplier-" + std::to_string(muEDCAmultiplier) +
                                      "-macQueueSize-" + macQueueSize + "-apApplicationDataRate-" +
                                      apApplicationDataRate + "-staApplicationDataRate-" +
                                      staApplicationDataRate + "-rx-packet";
             std::string filePathLatency =
-                "TXS-Data/MU-UL/randomSeed-" + std::to_string(randomSeed) + "-muEDCAmultiplier-" +
+                "TXS-Data/UL-MU/randomSeed-" + std::to_string(randomSeed) + "-muEDCAmultiplier-" +
                 std::to_string(muEDCAmultiplier) + "-macQueueSize-" + macQueueSize +
                 "-apApplicationDataRate-" + apApplicationDataRate + "-staApplicationDataRate-" +
                 staApplicationDataRate + "-latency-time";
